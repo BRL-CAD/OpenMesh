@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -489,15 +489,11 @@ int main(int argc, char* argv[])
     std::clog << "    Input file: " << ifname << std::endl;
     std::clog << "   Output file: " << ofname << std::endl;
     std::clog << "    #collapses: " << opt.n_collapses << std::endl;
-  }
 
 
-  //----------------------------------------
 
+    //----------------------------------------
 
-   
-  if (gverbose)
-  {
     std::clog << "Begin decimation" << std::endl;
   }
    
@@ -512,6 +508,7 @@ int main(int argc, char* argv[])
   }
 
   //----------------------------------------
+
   return 0;
 }
 

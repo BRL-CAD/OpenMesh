@@ -117,25 +117,20 @@ endmacro ()
 
 # test for OpenMP
 macro (vci_openmp)
-  if (NOT OPENMP_NOTFOUND)
-    # Set off OpenMP on Darwin architectures
-    # since it causes crashes sometimes
-#    if(NOT APPLE)
-        find_package(OpenMP)
-      if (OPENMP_FOUND)
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        add_definitions(-DUSE_OPENMP)
+  if (NOT OPENMP_FOUND)
+     find_package(OpenMP)
+     if (OPENMP_FOUND)
+       set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+       set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+       add_definitions(-DUSE_OPENMP)
 
-        # export includes and libraries for usage within openflipper plugins
-        set(OPENMP_INCLUDE_DIRS ${OpenMP_CXX_INCLUDE_DIR})
-        set(OPENMP_LIBRARIES ${OpenMP_libomp_LIBRARY})        
-#      else ()
-#        set (OPENMP_NOTFOUND 1)
-#      endif ()
+       # export includes and libraries for usage within openflipper plugins
+       set(OPENMP_INCLUDE_DIRS ${OpenMP_CXX_INCLUDE_DIR})
+       set(OPENMP_LIBRARIES ${OpenMP_libomp_LIBRARY})        
     endif()
-  endif ()
+  endif()
 endmacro ()
+
 
 # append all files with extension "ext" in the "dirs" directories to "ret"
 # excludes all files starting with a '.' (dot)

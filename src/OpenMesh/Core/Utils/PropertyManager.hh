@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -286,7 +286,7 @@ class PropertyManager {
           Storage::swap(rhs, *this);
         }
 
-        static bool propertyExists(PolyConnectivity &mesh, const char *propname) {
+        static bool propertyExists(const PolyConnectivity &mesh, const char *propname) {
             PROPTYPE dummy;
             return mesh.get_property_handle(dummy, propname);
         }

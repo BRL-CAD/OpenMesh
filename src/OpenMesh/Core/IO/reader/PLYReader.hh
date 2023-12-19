@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -61,6 +61,7 @@
 #include <string>
 #include <cstdio>
 #include <vector>
+#include <list>
 
 #include <OpenMesh/Core/System/config.h>
 #include <OpenMesh/Core/Utils/SingletonT.hh>
@@ -144,7 +145,17 @@ private:
 
   /// Read unsupported properties in PLY file
   void consume_input(std::istream& _in, int _count) const {
-	  _in.read(reinterpret_cast<char*>(&buff[0]), _count);
+
+      // Make sure, we do not run over our buffer size
+      int loops = _count / 8 ;
+
+      // Read only our buffer size batches
+      for ( auto i = 0 ; i < loops; ++i) {
+          _in.read(reinterpret_cast<char*>(&buff[0]), 8);
+      }
+
+      // Read reminder which is smaller than our buffer size
+      _in.read(reinterpret_cast<char*>(&buff[0]), _count - 8 * loops );
   }
 
   mutable unsigned char buff[8];
@@ -165,7 +176,7 @@ private:
     TEXX,TEXY,
     COLORRED,COLORGREEN,COLORBLUE,COLORALPHA,
     XNORM,YNORM,ZNORM, CUSTOM_PROP, VERTEX_INDICES,
-    UNSUPPORTED
+    TEXCOORD, TEXNUMBER, UNSUPPORTED
   };
 
   /// Stores sizes of property types
@@ -199,6 +210,8 @@ private:
   };
 
   mutable std::vector< ElementInfo > elements_;
+
+  mutable std::vector< std::string > texture_files_;
 
   template<typename T>
   inline void read(_PLYReader_::ValueType _type, std::istream& _in, T& _value, OpenMesh::GenProg::TrueType /*_binary*/) const

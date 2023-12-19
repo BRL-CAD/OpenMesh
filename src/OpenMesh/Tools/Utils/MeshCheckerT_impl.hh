@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -73,23 +73,14 @@ check(unsigned int _targets, std::ostream& _os)
 
   if (_targets & CHECK_VERTICES)
   {
-    typename Mesh::ConstVertexIter v_it(mesh_.vertices_begin()), v_end(mesh_.vertices_end());
-    typename Mesh::VertexHandle    vh;
-    typename Mesh::ConstVertexVertexCWIter vv_it;
-    typename Mesh::HalfedgeHandle  heh;
     unsigned int                   count;
     const unsigned int             max_valence(10000);
 
 
-    for (; v_it != v_end; ++v_it)
+    for (const auto vh: mesh_.vertices())
     {
-      if (!is_deleted(*v_it))
-      {
-        vh = *v_it;
-
-
         /* The outgoing halfedge of a boundary vertex has to be a boundary halfedge */
-        heh = mesh_.halfedge_handle(vh);
+        auto heh = vh.halfedge();
         if (heh.is_valid() && !mesh_.is_boundary(heh))
         {
           for (typename Mesh::ConstVertexOHalfedgeIter vh_it(mesh_, vh);
@@ -102,6 +93,18 @@ check(unsigned int _targets, std::ostream& _os)
               ok = false;
             }
           }
+        }
+        if (heh.is_valid()) {
+          if (heh.idx() < -1 || heh.idx() >= (int)mesh_.n_halfedges()) {
+              _os << "MeshChecker: vertex " << vh
+                  << " has out-of-bounds outgoing HE: " << heh;
+              ok = false;
+            }
+            if (is_deleted(heh.edge())) {
+              _os << "MeshChecker: vertex " << vh
+                  << " has deleted outgoing HE: " << heh;
+              ok = false;
+            }
         }
 
 
@@ -117,7 +120,7 @@ check(unsigned int _targets, std::ostream& _os)
 
 
         // check whether circulators are still in order
-        vv_it = mesh_.cvv_cwiter(vh);
+        auto vv_it = mesh_.cvv_cwiter(vh);
         for (count=0; vv_it.is_valid() && (count < max_valence); ++vv_it, ++count) {};
         if (count == max_valence)
         {
@@ -133,7 +136,6 @@ check(unsigned int _targets, std::ostream& _os)
               << ": --circulator problem, one ring corrupt\n";
           ok = false;
         }
-      }
     }
   }
 
@@ -145,48 +147,64 @@ check(unsigned int _targets, std::ostream& _os)
   {
     typename Mesh::ConstHalfedgeIter  h_it(mesh_.halfedges_begin()), 
         h_end(mesh_.halfedges_end());
-    typename Mesh::HalfedgeHandle     hh, hstart, hhh;
-    size_t                            count, n_halfedges = 2*mesh_.n_edges();
+    typename Mesh::HalfedgeHandle     hstart, hhh;
+    size_t                            n_halfedges = 2*mesh_.n_edges();
 
-    for (; h_it != h_end; ++h_it)
+    for (const auto hh: mesh_.halfedges())
     {
-      if (!is_deleted(mesh_.edge_handle(*h_it)))
+      if (!hh.to().halfedge().is_valid()) {
+            _os << "MeshChecker: vertex " << hh.from()
+                << " has no outgoing halfedge, but it is not isolated.\n";
+            ok = false;
+      }
+      // degenerated halfedge ?
+      if (mesh_.from_vertex_handle(hh) == mesh_.to_vertex_handle(hh))
       {
-        hh = *h_it;
+        _os << "MeshChecker: halfedge " << hh
+            << ": to-vertex == from-vertex\n";
+        ok = false;
+      }
 
 
-        // degenerated halfedge ?
-        if (mesh_.from_vertex_handle(hh) == mesh_.to_vertex_handle(hh))
-        {
-          _os << "MeshChecker: halfedge " << hh
-              << ": to-vertex == from-vertex\n";
-          ok = false;
-        }
+      // next <-> prev check
+      if (mesh_.next_halfedge_handle(mesh_.prev_halfedge_handle(hh)) != hh)
+      {
+        _os << "MeshChecker: halfedge " << hh
+            << ": prev->next != this\n";
+        ok = false;
+      }
+
+      // heh.to == heh.next.from?
+      if (mesh_.to_vertex_handle(hh) != mesh_.from_vertex_handle(
+                  mesh_.next_halfedge_handle(hh)))
+      {
+        _os << "MeshChecker: halfedge " << hh
+            << ".to != he.next.from\n";
+        ok = false;
+      }
+      // heh.from == heh.prev.to?
+      if (mesh_.from_vertex_handle(hh) != mesh_.to_vertex_handle(
+                  mesh_.prev_halfedge_handle(hh)))
+      {
+        _os << "MeshChecker: halfedge " << hh
+            << ".from != he.prev.to\n";
+        ok = false;
+      }
 
 
-        // next <-> prev check
-        if (mesh_.next_halfedge_handle(mesh_.prev_halfedge_handle(hh)) != hh)
-        {
-          _os << "MeshChecker: halfedge " << hh
-              << ": prev->next != this\n";
-          ok = false;
-        }
+      // halfedges should form a cycle
+      size_t count=0; hstart=hhh=hh;
+      do
+      {
+        hhh = mesh_.next_halfedge_handle(hhh);
+        ++count;
+      } while (hhh != hstart && count < n_halfedges);
 
-
-        // halfedges should form a cycle
-        count=0; hstart=hhh=hh;
-        do
-        {
-          hhh = mesh_.next_halfedge_handle(hhh);
-          ++count;
-        } while (hhh != hstart && count < n_halfedges);
-
-        if (count == n_halfedges)
-        {
-          _os << "MeshChecker: halfedges starting from " << hh
-              << " do not form a cycle\n";
-          ok = false;
-        }
+      if (count == n_halfedges)
+      {
+        _os << "MeshChecker: halfedges starting from " << hh
+            << " do not form a cycle\n";
+        ok = false;
       }
     }
   }
@@ -199,25 +217,18 @@ check(unsigned int _targets, std::ostream& _os)
   {
     typename Mesh::ConstFaceIter          f_it(mesh_.faces_begin()), 
         f_end(mesh_.faces_end());
-    typename Mesh::FaceHandle             fh;
     typename Mesh::ConstFaceHalfedgeIter  fh_it;
 
-    for (; f_it != f_end; ++f_it)
-    {
-      if (!is_deleted(*f_it))
-      {
-        fh = *f_it;
-
-        for (fh_it=mesh_.cfh_iter(fh); fh_it.is_valid(); ++fh_it)
-        {
-          if (mesh_.face_handle(*fh_it) != fh)
-          {
-            _os << "MeshChecker: face " << fh
-                << ": its halfedge does not reference face\n";
-            ok = false;
-          }
+    for(const auto fh: mesh_.faces()) {
+        for(const auto heh: fh.halfedges()) {
+            if (heh.face() != fh) {
+                _os << "MeshChecker: face " << fh
+                    << ": its halfedge " << heh << " references a different face: "
+                    << heh.face()
+                    << ".\n";
+                ok = false;
+            }
         }
-      }
     }
   }
 

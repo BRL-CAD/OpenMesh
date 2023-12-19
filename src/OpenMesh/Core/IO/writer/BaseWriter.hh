@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -105,41 +105,41 @@ public:
   /** Write to a file
    * @param _filename write to file with the given filename
    * @param _be BaseExporter, which specifies the data source
-   * @param _opt writing options
+   * @param _writeOptions writing options
    * @param _precision can be used to specify the precision of the floating point notation.
    */
   virtual bool write(const std::string& _filename,
-		     BaseExporter& _be,
-                     Options _opt,
+                     BaseExporter& _be,
+                     const Options& _writeOptions,
                      std::streamsize _precision = 6) const = 0;
 
   /** Write to a std::ostream
    * @param _os write to std::ostream
    * @param _be BaseExporter, which specifies the data source
-   * @param _opt writing options
+   * @param _writeOptions writing options
    * @param _precision can be used to specify the precision of the floating point notation.
    */
   virtual bool write(std::ostream& _os,
-		     BaseExporter& _be,
-                     Options _opt,
+                     BaseExporter& _be,
+                     const Options& _writeOptions,
                      std::streamsize _precision = 6) const = 0;
 
   /// Returns expected size of file if binary format is supported else 0.
-  virtual size_t binary_size(BaseExporter&, Options) const { return 0; }
+  virtual size_t binary_size(BaseExporter&, const Options&) const { return 0; }
 
 
 
 protected:
 
-  bool check(BaseExporter& _be, Options _opt) const
+  bool check(BaseExporter& _be, const Options& _writeOptions) const
   {
     // Check for all Options. When we want to write them (_opt.check() ) , they have to be available ( has_ )
     // Converts to not A (write them) or B (available)
-    return     ( !_opt.check(Options::VertexNormal ) || _be.has_vertex_normals())
-           &&  ( !_opt.check(Options::VertexTexCoord)|| _be.has_vertex_texcoords())
-           &&  ( !_opt.check(Options::VertexColor)   || _be.has_vertex_colors())
-           &&  ( !_opt.check(Options::FaceNormal)    || _be.has_face_normals())
-           &&  ( !_opt.check(Options::FaceColor)     || _be.has_face_colors());
+    return     ( !_writeOptions.check(Options::VertexNormal ) || _be.has_vertex_normals())
+           &&  ( !_writeOptions.check(Options::VertexTexCoord)|| _be.has_vertex_texcoords())
+           &&  ( !_writeOptions.check(Options::VertexColor)   || _be.has_vertex_colors())
+           &&  ( !_writeOptions.check(Options::FaceNormal)    || _be.has_face_normals())
+           &&  ( !_writeOptions.check(Options::FaceColor)     || _be.has_face_colors());
   }
 };
 

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -170,9 +170,6 @@ public: // specific methods
   const InfoList& infolist() const { return pmi_; }
 
 private:
-
-  // hide this method form user
-  void set_binary(bool _b) {}
 
   InfoList          pmi_;
   VPropHandleT<size_t> idx_;

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -188,7 +188,10 @@ MeshViewerWidgetT<M>::open_mesh(const char* _filename, IO::Options _opt)
     updateGL();
 #endif
 
-    setWindowTitle(QFileInfo(_filename).fileName());
+    if ( this->parentWidget() != nullptr )
+        this->parentWidget()->setWindowTitle(QFileInfo(_filename).fileName());
+    else
+        setWindowTitle(QFileInfo(_filename).fileName());
 
     // loading done
     return true;

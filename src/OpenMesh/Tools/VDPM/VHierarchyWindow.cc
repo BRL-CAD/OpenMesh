@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -124,7 +124,7 @@ update_buffer(VHierarchyNodeHandle _node_handle)
       buffer_max_ = 1 + vhierarchy_->num_nodes() / 8;
   }
   
-  unsigned char *new_buffer = (unsigned char *) malloc(buffer_size());
+  unsigned char *new_buffer = static_cast<unsigned char *>(malloc(buffer_size()));
   memset(new_buffer, 0, buffer_size());
   memcpy(&(new_buffer[window_min_-buffer_min_]), 
 	 &(buffer_[none_zero_pos]), 
@@ -146,7 +146,7 @@ VHierarchyWindow::init(VHierarchyNodeHandleContainer &_roots)
   if (_roots.size() % 8 > 0)
     ++buffer_max_;
 
-  buffer_ = (unsigned char *) malloc(buffer_size());
+  buffer_ = static_cast<unsigned char *>(malloc(buffer_size()));
   memset(buffer_, 0, buffer_size());
 
   window_min_ = 0;

@@ -120,14 +120,14 @@ public:
           const string & _style,
           const string & _xlabel,
           const string & _ylabel,
-          vector<double> _x, vector<double> _y);
+          const vector<double>& _x, const vector<double>& _y);
   
   /// Constructor calling plot_x().
   Gnuplot(const string &_title,
           const string &_style,
           const string &_xlabel,
           const string &_ylabel,
-          vector<double> _x);
+          const vector<double>& _x);
   //@}
 
   ~Gnuplot();
@@ -146,10 +146,10 @@ public:
   //@{
 
   /// Plot a single vector
-  void plot_x(vector<double> _x, const string &_title);
+  void plot_x(const vector<double>& _x, const string &_title);
   
   /// Plot x,y pairs
-  void plot_xy(vector<double> _x, vector<double> _y, const string  &_title);
+  void plot_xy(const vector<double>& _x, const vector<double>& _y, const string  &_title);
   
   /// Plot an equation of the form: y = ax + b
   /// You supply a and b

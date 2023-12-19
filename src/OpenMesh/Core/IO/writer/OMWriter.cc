@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -93,7 +93,7 @@ _OMWriter_()
 
 bool
 _OMWriter_::write(const std::string& _filename, BaseExporter& _be,
-                   Options _opt, std::streamsize /*_precision*/) const
+                   const Options& _writeOptions, std::streamsize /*_precision*/) const
 {
   // check whether exporter can give us an OpenMesh BaseKernel
   if (!_be.kernel()) return false;
@@ -103,7 +103,9 @@ _OMWriter_::write(const std::string& _filename, BaseExporter& _be,
   if (_filename.rfind(".om") == std::string::npos)
     return false;
 
-  _opt += Options::Binary; // only binary format supported
+  Options tmpOptions = _writeOptions;
+
+  tmpOptions += Options::Binary; // only binary format supported
 
   std::ofstream ofs(_filename.c_str(), std::ios::binary);
 
@@ -115,7 +117,7 @@ _OMWriter_::write(const std::string& _filename, BaseExporter& _be,
   }
 
   // call stream save method
-  bool rc = write(ofs, _be, _opt);
+  bool rc = write(ofs, _be, tmpOptions);
 
   // close filestream
   ofs.close();
@@ -128,27 +130,31 @@ _OMWriter_::write(const std::string& _filename, BaseExporter& _be,
 //-----------------------------------------------------------------------------
 
 bool
-_OMWriter_::write(std::ostream& _os, BaseExporter& _be, Options _opt, std::streamsize /*_precision*/) const
+_OMWriter_::write(std::ostream& _os, BaseExporter& _be, const Options& _writeOptions, std::streamsize /*_precision*/) const
 {
 //   std::clog << "[OMWriter]::write( stream )\n";
 
+  Options tmpOptions = _writeOptions;
+
   // check exporter features
-  if ( !check( _be, _opt ) )
+  if ( !check( _be, tmpOptions ) )
   {
     omerr() << "[OMWriter]: exporter does not support wanted feature!\n";
     return false;
   }
 
+
+
   // Maybe an ascii version will be implemented in the future.
   // For now, support only a binary format
-  if ( !_opt.check( Options::Binary ) )
-    _opt += Options::Binary;
+  if ( !tmpOptions.check( Options::Binary ) )
+    tmpOptions += Options::Binary;
 
   // Ignore LSB/MSB bit. Always store in LSB (little endian)
-  _opt += Options::LSB;
-  _opt -= Options::MSB;
+  tmpOptions += Options::LSB;
+  tmpOptions -= Options::MSB;
 
-  return write_binary(_os, _be, _opt);
+  return write_binary(_os, _be, tmpOptions);
 }
 
 
@@ -169,7 +175,7 @@ template <typename T> struct Enabler
 
 
 bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
-                               Options _opt) const
+                               const Options& _writeOptions) const
 {
   #ifndef DOXY_IGNORE_THIS
     Enabler<mostream> enabler(omlog());
@@ -177,8 +183,8 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   size_t bytes = 0;
 
-  const bool swap =
-      _opt.check(Options::Swap) || (Endian::local() == Endian::MSB);
+  const bool swap_required =
+      _writeOptions.check(Options::Swap) || (Endian::local() == Endian::MSB);
 
   unsigned int i, nV, nF;
   Vec3f v;
@@ -196,7 +202,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   header.n_faces_    = int(_be.n_faces());
   header.n_edges_    = int(_be.n_edges());
 
-  bytes += store( _os, header, swap );
+  bytes += store( _os, header, swap_required );
 
   // ---------------------------------------- write chunks
 
@@ -228,18 +234,18 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
       chunk_header.bits_     = OMFormat::bits(v[0]);
     }
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
     if (_be.is_point_double())
       for (i=0, nV=header.n_vertices_; i<nV; ++i)
-        bytes += vector_store( _os, _be.pointd(VertexHandle(i)), swap );
+        bytes += vector_store( _os, _be.pointd(VertexHandle(i)), swap_required );
     else
       for (i=0, nV=header.n_vertices_; i<nV; ++i)
-        bytes += vector_store( _os, _be.point(VertexHandle(i)), swap );
+        bytes += vector_store( _os, _be.point(VertexHandle(i)), swap_required );
   }
 
 
   // ---------- write vertex normal
-  if (_be.n_vertices() && _opt.check( Options::VertexNormal ))
+  if (_be.n_vertices() && _writeOptions.check( Options::VertexNormal ))
   {
     Vec3f n = _be.normal(VertexHandle(0));
     Vec3d nd = _be.normald(VertexHandle(0));
@@ -262,18 +268,18 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
       chunk_header.bits_     = OMFormat::bits(n[0]);
     }
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
     if (_be.is_normal_double())
       for (i=0, nV=header.n_vertices_; i<nV; ++i)
-        bytes += vector_store( _os, _be.normald(VertexHandle(i)), swap );
+        bytes += vector_store( _os, _be.normald(VertexHandle(i)), swap_required );
     else
       for (i=0, nV=header.n_vertices_; i<nV; ++i)
-        bytes += vector_store( _os, _be.normal(VertexHandle(i)), swap );
+        bytes += vector_store( _os, _be.normal(VertexHandle(i)), swap_required );
 
   }
 
   // ---------- write vertex color
-  if (_be.n_vertices() && _opt.check( Options::VertexColor ) && _be.has_vertex_colors() )
+  if (_be.n_vertices() && _writeOptions.check( Options::VertexColor ) && _be.has_vertex_colors() )
   {
     Vec3uc c = _be.color(VertexHandle(0));
 
@@ -285,13 +291,13 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_      = OMFormat::dim( c );
     chunk_header.bits_     = OMFormat::bits( c[0] );
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
     for (i=0, nV=header.n_vertices_; i<nV; ++i)
-      bytes += vector_store( _os, _be.color(VertexHandle(i)), swap );
+      bytes += vector_store( _os, _be.color(VertexHandle(i)), swap_required );
   }
 
   // ---------- write vertex texture coords
-  if (_be.n_vertices() && _opt.check(Options::VertexTexCoord)) {
+  if (_be.n_vertices() && _writeOptions.check(Options::VertexTexCoord)) {
 
     t = _be.texcoord(VertexHandle(0));
 
@@ -303,10 +309,10 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_ = OMFormat::dim(t);
     chunk_header.bits_ = OMFormat::bits(t[0]);
 
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     for (i = 0, nV = header.n_vertices_; i < nV; ++i)
-      bytes += vector_store(_os, _be.texcoord(VertexHandle(i)), swap);
+      bytes += vector_store(_os, _be.texcoord(VertexHandle(i)), swap_required);
 
   }
 
@@ -322,7 +328,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_      = OMFormat::Chunk::Dim_3D;
     chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
     auto nE=header.n_edges_*2;
     for (i=0; i<nE; ++i)
     {
@@ -330,15 +336,15 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
       auto to_vertex_id = _be.get_to_vertex_id(HalfedgeHandle(static_cast<int>(i)));
       auto face_id      = _be.get_face_id(HalfedgeHandle(static_cast<int>(i)));
 
-      bytes += store( _os, next_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
-      bytes += store( _os, to_vertex_id, OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
-      bytes += store( _os, face_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, next_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap_required );
+      bytes += store( _os, to_vertex_id, OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap_required );
+      bytes += store( _os, face_id,      OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap_required );
     }
   }
 
 
   // ---------- write face texture coords
-  if (_OMWriter_::version_ > OMFormat::mk_version(2,1) && _be.n_edges() && _opt.check(Options::FaceTexCoord))
+  if (_OMWriter_::version_ > OMFormat::mk_version(2,1) && _be.n_edges() && _writeOptions.check(Options::FaceTexCoord))
   {
 
     t = _be.texcoord(HalfedgeHandle(0));
@@ -351,11 +357,11 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_ = OMFormat::dim(t);
     chunk_header.bits_ = OMFormat::bits(t[0]);
 
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     unsigned int nHE;
     for (i = 0, nHE = header.n_edges_*2; i < nHE; ++i)
-      bytes += vector_store(_os, _be.texcoord(HalfedgeHandle(i)), swap);
+      bytes += vector_store(_os, _be.texcoord(HalfedgeHandle(i)), swap_required);
 
   }
   //---------------------------------------------------------------
@@ -372,9 +378,9 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
     chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
     for (i=0, nV=header.n_vertices_; i<nV; ++i)
-      bytes += store( _os, _be.get_halfedge_id(VertexHandle(i)), OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap );
+      bytes += store( _os, _be.get_halfedge_id(VertexHandle(i)), OMFormat::Chunk::Integer_Size(chunk_header.bits_), swap_required );
   }
 
 
@@ -390,18 +396,18 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.dim_      = OMFormat::Chunk::Dim_1D;
     chunk_header.bits_     = OMFormat::needed_bits(_be.n_edges()*4); // *2 due to halfedge ids being stored, *2 due to signedness
 
-    bytes += store( _os, chunk_header, swap );
+    bytes += store( _os, chunk_header, swap_required );
 
     for (i=0, nF=header.n_faces_; i<nF; ++i)
     {
       auto size = OMFormat::Chunk::Integer_Size(chunk_header.bits_);
-      bytes += store( _os, _be.get_halfedge_id(FaceHandle(i)), size, swap);
+      bytes += store( _os, _be.get_halfedge_id(FaceHandle(i)), size, swap_required);
     }
   }
 
   // ---------- write face normals
 
-  if (_be.n_faces() && _be.has_face_normals() && _opt.check(Options::FaceNormal) )
+  if (_be.n_faces() && _be.has_face_normals() && _writeOptions.check(Options::FaceNormal) )
   {
 #define NEW_STYLE 0
 #if NEW_STYLE
@@ -432,14 +438,14 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
         chunk_header.bits_     = OMFormat::bits(n[0]);
       }
 
-      bytes += store( _os, chunk_header, swap );
+      bytes += store( _os, chunk_header, swap_required );
 #if !NEW_STYLE
       if (_be.is_normal_double())
         for (i=0, nF=header.n_faces_; i<nF; ++i)
-          bytes += vector_store( _os, _be.normald(FaceHandle(i)), swap );
+          bytes += vector_store( _os, _be.normald(FaceHandle(i)), swap_required );
       else
         for (i=0, nF=header.n_faces_; i<nF; ++i)
-          bytes += vector_store( _os, _be.normal(FaceHandle(i)), swap );
+          bytes += vector_store( _os, _be.normal(FaceHandle(i)), swap_required );
 
 #else
       bytes += bp->store(_os, swap );
@@ -453,7 +459,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
 
   // ---------- write face color
 
-  if (_be.n_faces() && _be.has_face_colors() && _opt.check( Options::FaceColor ))
+  if (_be.n_faces() && _be.has_face_colors() && _writeOptions.check( Options::FaceColor ))
   {
 #define NEW_STYLE 0
 #if NEW_STYLE
@@ -472,10 +478,10 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
       chunk_header.dim_      = OMFormat::dim( c );
       chunk_header.bits_     = OMFormat::bits( c[0] );
 
-      bytes += store( _os, chunk_header, swap );
+      bytes += store( _os, chunk_header, swap_required );
 #if !NEW_STYLE
       for (i=0, nF=header.n_faces_; i<nF; ++i)
-        bytes += vector_store( _os, _be.color(FaceHandle(i)), swap );
+        bytes += vector_store( _os, _be.color(FaceHandle(i)), swap_required );
 #else
       bytes += bp->store(_os, swap);
     }
@@ -485,7 +491,7 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
   }
 
   // ---------- write vertex status
-  if (_be.n_vertices() && _be.has_vertex_status() && _opt.check(Options::Status))
+  if (_be.n_vertices() && _be.has_vertex_status() && _writeOptions.check(Options::Status))
   {
     auto s = _be.status(VertexHandle(0));
     chunk_header.name_ = false;
@@ -497,14 +503,14 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.bits_ = OMFormat::bits(s);
 
     // std::clog << chunk_header << std::endl;
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     for (i = 0, nV = header.n_vertices_; i < nV; ++i)
-      bytes += store(_os, _be.status(VertexHandle(i)), swap);
+      bytes += store(_os, _be.status(VertexHandle(i)), swap_required);
   }
 
   // ---------- write edge status
-  if (_be.n_edges() && _be.has_edge_status() && _opt.check(Options::Status))
+  if (_be.n_edges() && _be.has_edge_status() && _writeOptions.check(Options::Status))
   {
     auto s = _be.status(EdgeHandle(0));
     chunk_header.name_ = false;
@@ -516,14 +522,14 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.bits_ = OMFormat::bits(s);
 
     // std::clog << chunk_header << std::endl;
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     for (i = 0, nV = header.n_edges_; i < nV; ++i)
-      bytes += store(_os, _be.status(EdgeHandle(i)), swap);
+      bytes += store(_os, _be.status(EdgeHandle(i)), swap_required);
   }
 
   // ---------- write halfedge status
-  if (_be.n_edges() && _be.has_halfedge_status() && _opt.check(Options::Status))
+  if (_be.n_edges() && _be.has_halfedge_status() && _writeOptions.check(Options::Status))
   {
     auto s = _be.status(HalfedgeHandle(0));
     chunk_header.name_ = false;
@@ -535,14 +541,14 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.bits_ = OMFormat::bits(s);
 
     // std::clog << chunk_header << std::endl;
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     for (i = 0, nV = header.n_edges_ * 2; i < nV; ++i)
-      bytes += store(_os, _be.status(HalfedgeHandle(i)), swap);
+      bytes += store(_os, _be.status(HalfedgeHandle(i)), swap_required);
   }
 
   // ---------- write face status
-  if (_be.n_faces() && _be.has_face_status() && _opt.check(Options::Status))
+  if (_be.n_faces() && _be.has_face_status() && _writeOptions.check(Options::Status))
   {
     auto s = _be.status(FaceHandle(0));
     chunk_header.name_ = false;
@@ -554,47 +560,48 @@ bool _OMWriter_::write_binary(std::ostream& _os, BaseExporter& _be,
     chunk_header.bits_ = OMFormat::bits(s);
 
     // std::clog << chunk_header << std::endl;
-    bytes += store(_os, chunk_header, swap);
+    bytes += store(_os, chunk_header, swap_required);
 
     for (i = 0, nV = header.n_faces_; i < nV; ++i)
-      bytes += store(_os, _be.status(FaceHandle(i)), swap);
+      bytes += store(_os, _be.status(FaceHandle(i)), swap_required);
   }
 
   // -------------------- write custom properties
 
-
-
-  const auto store_property = [this, &_os, swap, &bytes](
-    const BaseKernel::const_prop_iterator _it_begin, 
-    const BaseKernel::const_prop_iterator _it_end, 
-    const OMFormat::Chunk::Entity _ent)
+  if (_writeOptions.check(Options::Custom))
   {
-    for (auto prop = _it_begin; prop != _it_end; ++prop)
+    const auto store_property = [this, &_os, swap_required, &bytes](
+      const BaseKernel::const_prop_iterator _it_begin,
+      const BaseKernel::const_prop_iterator _it_end,
+      const OMFormat::Chunk::Entity _ent)
     {
-      if (!*prop || (*prop)->name().empty() ||
-          ((*prop)->name().size() > 1 && (*prop)->name()[1] == ':'))
-      { // skip dead and "private" properties (no name or name matches "?:*")
-        continue;
+      for (auto prop = _it_begin; prop != _it_end; ++prop)
+      {
+        if (!*prop || (*prop)->name().empty() ||
+            ((*prop)->name().size() > 1 && (*prop)->name()[1] == ':'))
+        { // skip dead and "private" properties (no name or name matches "?:*")
+          continue;
+        }
+        bytes += store_binary_custom_chunk(_os, **prop, _ent, swap_required);
       }
-      bytes += store_binary_custom_chunk(_os, **prop, _ent, swap);
-    }
-  };
+    };
 
-  store_property(_be.kernel()->vprops_begin(), _be.kernel()->vprops_end(),
-      OMFormat::Chunk::Entity_Vertex);
-  store_property(_be.kernel()->fprops_begin(), _be.kernel()->fprops_end(),
-      OMFormat::Chunk::Entity_Face);
-  store_property(_be.kernel()->eprops_begin(), _be.kernel()->eprops_end(),
-      OMFormat::Chunk::Entity_Edge);
-  store_property(_be.kernel()->hprops_begin(), _be.kernel()->hprops_end(),
-      OMFormat::Chunk::Entity_Halfedge);
-  store_property(_be.kernel()->mprops_begin(), _be.kernel()->mprops_end(),
-      OMFormat::Chunk::Entity_Mesh);
+    store_property(_be.kernel()->vprops_begin(), _be.kernel()->vprops_end(),
+        OMFormat::Chunk::Entity_Vertex);
+    store_property(_be.kernel()->fprops_begin(), _be.kernel()->fprops_end(),
+        OMFormat::Chunk::Entity_Face);
+    store_property(_be.kernel()->eprops_begin(), _be.kernel()->eprops_end(),
+        OMFormat::Chunk::Entity_Edge);
+    store_property(_be.kernel()->hprops_begin(), _be.kernel()->hprops_end(),
+        OMFormat::Chunk::Entity_Halfedge);
+    store_property(_be.kernel()->mprops_begin(), _be.kernel()->mprops_end(),
+        OMFormat::Chunk::Entity_Mesh);
+  }
 
   memset(&chunk_header, 0, sizeof(chunk_header));
   chunk_header.name_ = false;
   chunk_header.entity_ = OMFormat::Chunk::Entity_Sentinel;
-  bytes += store(_os, chunk_header, swap);
+  bytes += store(_os, chunk_header, swap_required);
 
   omlog() << "#bytes written: " << bytes << std::endl;
 
@@ -665,7 +672,7 @@ size_t _OMWriter_::store_binary_custom_chunk(std::ostream& _os,
 
 // ----------------------------------------------------------------------------
 
-size_t _OMWriter_::binary_size(BaseExporter& /* _be */, Options /* _opt */) const
+size_t _OMWriter_::binary_size(BaseExporter& /* _be */, const Options& /* _opt */) const
 {
   // std::clog << "[OMWriter]: binary_size()" << std::endl;
   size_t bytes  = sizeof( OMFormat::Header );

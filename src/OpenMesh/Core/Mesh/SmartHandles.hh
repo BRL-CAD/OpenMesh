@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2019, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -213,6 +213,15 @@ struct OPENMESHDLLEXPORT SmartEdgeHandle : public SmartBaseHandle, EdgeHandle, S
   SmartVertexHandle   v0()                      const;
   /// Shorthand for vertex(1)
   SmartVertexHandle   v1()                      const;
+
+  /// Returns a range of vertices incident to the edge (PolyConnectivity::ev_range())
+  PolyConnectivity::ConstEdgeVertexRange   vertices()  const;
+  /// Returns a range of halfedges of the edge (PolyConnectivity::eh_range())
+  PolyConnectivity::ConstEdgeHalfedgeRange halfedges() const;
+  /// Returns a range of halfedges of the edge (PolyConnectivity::eh_range())
+  PolyConnectivity::ConstEdgeHalfedgeRange halfedges(HalfedgeHandle _heh) const;
+  /// Returns a range of faces incident to the edge (PolyConnectivity::ef_range())
+  PolyConnectivity::ConstEdgeFaceRange     faces()     const;
 };
 
 struct OPENMESHDLLEXPORT SmartFaceHandle : public SmartBaseHandle, FaceHandle, SmartHandleStatusPredicates<SmartFaceHandle>, SmartHandleBoundaryPredicate<SmartFaceHandle>
@@ -415,13 +424,13 @@ inline SmartFaceHandle SmartHalfedgeHandle::face() const
   return make_smart(mesh()->face_handle(*this), mesh());
 }
 
-inline SmartHalfedgeHandle SmartEdgeHandle::halfedge(unsigned int _i) const
+inline SmartHalfedgeHandle SmartEdgeHandle::halfedge(unsigned int _i = 0) const
 {
   assert(mesh() != nullptr);
   return make_smart(mesh()->halfedge_handle(*this, _i), mesh());
 }
 
-inline SmartHalfedgeHandle SmartEdgeHandle::h(unsigned int _i) const
+inline SmartHalfedgeHandle SmartEdgeHandle::h(unsigned int _i = 0) const
 {
   return halfedge(_i);
 }

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -154,9 +154,6 @@ public:
 
 private:
 
-  /// hide this method
-  void set_binary(bool _b) {}
-
   OpenMesh::VPropHandleT<level_t> level_;
 
   level_t max_level_; // maximum level reached
@@ -181,9 +178,18 @@ replace_extension( std::string& _s, const std::string& _e )
 {
   std::string::size_type dot = _s.rfind(".");
   if (dot == std::string::npos)
-  { _s += "." + _e; }
+  {
+     // The name does not include a dot and therefore no extension. Adding both.
+     _s += "." + _e;
+  }
   else
-  { _s = _s.substr(0,dot+1)+_e; }
+  {
+     // get everything of the name including the dot but remove the extension.
+     const std::string name = _s.substr(0,dot+1);
+
+     // Add the new extenion
+     _s = name + _e;
+  }
   return _s;
 }
 

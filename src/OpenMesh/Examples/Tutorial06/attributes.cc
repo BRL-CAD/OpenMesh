@@ -9,7 +9,7 @@
 #ifndef DOXY_IGNORE_THIS
 
 // Define my personal traits
-struct MyTraits : OpenMesh::DefaultTraits
+struct MyAttributesExampleTraits : OpenMesh::DefaultTraits
 {
   // Let Point and Normal be a vector of doubles
   typedef OpenMesh::Vec3d Point;
@@ -29,7 +29,7 @@ struct MyTraits : OpenMesh::DefaultTraits
 #endif
 
 // Define my mesh with the new traits!
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits>  MyMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<MyAttributesExampleTraits>  MyMesh;
 
 // ------------------------------------------------------------------ main ----
 

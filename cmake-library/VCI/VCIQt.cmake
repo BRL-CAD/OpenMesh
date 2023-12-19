@@ -44,7 +44,7 @@ macro (vci_qt)
                                                        NO_DEFAULT_PATH if no system installed Qt shall be found")
 
   # compute default search paths
-  set(SUPPORTED_QT_VERSIONS 6.2.1 6.1.2 6.0.4 6.0.3 5.15.2 5.12.2 5.11.3 5.11 5.10 5.9 5.8 5.7 5.6)
+  set(SUPPORTED_QT_VERSIONS 6.2.2 6.2.1 6.1.2 6.0.4 6.0.3 5.15.2 5.12.2 5.11.3 5.11 5.10 5.9 5.8 5.7 5.6)
   if (NOT QT_INSTALL_PATH_EXISTS)
     message("-- No QT path specified (or does not exist) - searching in common locations...")
     foreach (suffix gcc_64 clang_64)
@@ -223,19 +223,46 @@ function (vci_add_translations _target _languages _sources)
     endif ()
   endforeach ()
 
+  if (QT5_FOUND) 
+    FIND_PACKAGE( Qt5LinguistTools )
+  endif()
 
+  if (QT6_FOUND)
+    FIND_PACKAGE( Qt6LinguistTools )
+  endif()
+
+  # This block contains the translation files that should be updated.
+  # The UPDATE_TRANSLATIONS_${_TARGET} flag has to be set for the update
+  # to be enabled.
+  # Afterwards you can run the target ${_TARGET}_lupdate
   set (_qm_files)
   if ( _new_ts_files )
-    if (QT5_FOUND)
-      #qt5_create_translation(_qm_files ${_sources} ${_new_ts_files})
+
+    if ( QT5_FOUND)
+       qt_create_translation(_qm_files ${_sources} ${_new_ts_files})
+    endif()
+
+    if (QT6_FOUND)
+      qt_add_lupdate(${_target}
+                     TS_FILES ${_new_ts_files}
+	             )
     endif ()
+
   endif ()
 
+  # Here the list of translation files that will be compiled into
+  # qm files is generated along with the targets.
   if ( _ts_files )
     if (QT5_FOUND)
-      #qt5_add_translation(_qm_files2 ${_ts_files})
+       qt5_add_translation(_qm_files2 ${_ts_files})
+    endif() 
+    if (QT6_FOUND)
+      qt_add_lrelease(${_target}
+	              TS_FILES ${_ts_files} 
+		      QM_FILES_OUTPUT_VARIABLE _qm_files2)
     endif()
     list (APPEND _qm_files ${_qm_files2})
+
   endif ()
 
   # create a target for the translation files ( and object files )

@@ -1,4 +1,4 @@
-# OpenMesh, 9.0
+# OpenMesh, 10.0
 
 [![](https://gitlab.vci.wth-aachen.de:9000/OpenMesh/OpenMesh/badges/master/pipeline.svg)](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/OpenMesh/commits/master)
 
@@ -32,6 +32,11 @@ The following binaries are created from the latest master. They are automaticall
  [Download (Intel) ](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse?job=macos-cpp14-release)
  
  [Download (M1)    ](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse?job=macos-M1-cpp14-release)
+
+### Debian
+
+OpenMesh is about to get into the Debian repository. The debian packaging is available on [salsa.debian.org](https://salsa.debian.org/science-team/openmesh)
+
 
 ## Download Sources
 [ Download Sources](https://gitlab.vci.rwth-aachen.de:9000/OpenMesh/OpenMesh/-/jobs/artifacts/master/browse?job=Sources )

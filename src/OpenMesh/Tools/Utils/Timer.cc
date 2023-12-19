@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -111,7 +111,9 @@ TimerImplWin32::TimerImplWin32(void)
 {
    if (QueryPerformanceFrequency(&freq_)==FALSE)
      throw std::runtime_error("Performance counter of of stock!");
-   reset();
+
+   memset(&count_,0,sizeof(count_));
+   memset(&start_,0,sizeof(count_));
 }
 
 void TimerImplWin32::reset(void)
@@ -231,7 +233,7 @@ static const unsigned long clockticks = CLOCKS_PER_SEC;
 class TimerImplStd : public TimerImpl
 {
 public:
-   TimerImplStd() : freq_(clockticks),count_(0),start_(0) { reset(); }
+   TimerImplStd() : freq_(clockticks),count_(0),start_(0) { }
    ~TimerImplStd() { ; }
 
    virtual void   reset(void) override { count_ = 0; }

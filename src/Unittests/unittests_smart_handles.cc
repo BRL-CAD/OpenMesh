@@ -177,6 +177,10 @@ TEST_F(OpenMeshSmartHandles, SimpleNavigation)
 
   for (auto eh : mesh_.edges())
   {
+    EXPECT_EQ(mesh_.halfedge_handle(eh), eh.halfedge()) << "halfedge of edge does not match";
+    EXPECT_EQ(mesh_.halfedge_handle(eh, 0), eh.halfedge(0)) << "halfedge 0 of edge does not match";
+    EXPECT_EQ(mesh_.halfedge_handle(eh, 1), eh.halfedge(1)) << "halfedge 1 of edge does not match";
+    EXPECT_EQ(mesh_.halfedge_handle(eh), eh.h()) << "halfedge of edge does not match";
     EXPECT_EQ(mesh_.halfedge_handle(eh, 0), eh.h0()) << "halfedge 0 of edge does not match";
     EXPECT_EQ(mesh_.halfedge_handle(eh, 1), eh.h1()) << "halfedge 1 of edge does not match";
     EXPECT_EQ(mesh_.from_vertex_handle(mesh_.halfedge_handle(eh, 0)), eh.v0()) << "first vertex of edge does not match";

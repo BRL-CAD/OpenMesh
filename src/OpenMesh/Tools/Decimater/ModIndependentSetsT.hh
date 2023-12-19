@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -86,10 +86,6 @@ class ModIndependentSetsT: public ModBaseT<MeshT> {
         Base::mesh().status(*vv_it).set_locked(true);
     }
 
-  private:
-
-    /// hide this method
-    void set_binary(bool _b) { }
 };
 
 //=============================================================================

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -119,7 +119,7 @@ public:
   VHierarchyNodeHandle add_node();
   VHierarchyNodeHandle add_node(const VHierarchyNode &_node);
 
-  void make_children(VHierarchyNodeHandle &_parent_handle);
+  void make_children(const VHierarchyNodeHandle &_parent_handle);
 
   bool is_ancestor(VHierarchyNodeIndex _ancestor_index, 
 		   VHierarchyNodeIndex _descendent_index);

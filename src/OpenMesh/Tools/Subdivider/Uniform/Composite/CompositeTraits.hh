@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -106,10 +106,10 @@ struct CompositeTraits : public OpenMesh::DefaultTraits
     void set_green() {red_ = 0; }
     bool is_red() { return red_; }
     bool is_green() { return !red_; }
-    void set_red_halfedge_handle(HalfedgeHandle& _heh) 
+    void set_red_halfedge_handle(const HalfedgeHandle& _heh)
       { red_halfedge_handle_ = _heh; }
     HalfedgeHandle& red_halfedge_handle() { return red_halfedge_handle_; }
-    void set_quality(Scalar& _q) { quality_ = _q; }
+    void set_quality(const Scalar& _q) { quality_ = _q; }
     Scalar& quality() { return quality_; }
     const Point& midpoint() const { return midpoint_; }
     void set_midpoint(const Point& _p) { midpoint_ = _p; }

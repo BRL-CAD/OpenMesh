@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -141,8 +141,8 @@ namespace OMFormat {
 
     size_t restore( std::istream& _is, bool _swap )
     {
-      if (_is.read( (char*)this, 4 ).eof())
-	return 0;
+      if (_is.read( reinterpret_cast<char*>(this) , 4 ).eof())
+        return 0;
 
       size_t bytes = 4;
       bytes += binary<uint32_t>::restore( _is, n_vertices_, _swap );
@@ -307,7 +307,7 @@ namespace OMFormat {
 
 
   /// Return the size of chunk data in bytes
-  inline size_t chunk_data_size( Header& _hdr,  Chunk::Header& _chunk_hdr )
+  inline size_t chunk_data_size( const Header& _hdr,  const Chunk::Header& _chunk_hdr )
   {
     size_t C;
     switch( _chunk_hdr.entity_ )
@@ -327,7 +327,7 @@ namespace OMFormat {
     return C * vector_size( _chunk_hdr );
   }
 
-  inline size_t chunk_size( Header& _hdr, Chunk::Header& _chunk_hdr )
+  inline size_t chunk_size( const Header& _hdr, const Chunk::Header& _chunk_hdr )
   {
     return chunk_header_size() + chunk_data_size( _hdr, _chunk_hdr );
   }

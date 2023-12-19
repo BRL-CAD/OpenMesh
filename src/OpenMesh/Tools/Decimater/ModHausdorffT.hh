@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -87,7 +87,7 @@ class ModHausdorffT: public ModBaseT<MeshT> {
     typedef std::vector<Point> Points;
 
     /// Constructor
-    ModHausdorffT(MeshT& _mesh, Scalar _error_tolerance = FLT_MAX) :
+    explicit ModHausdorffT(MeshT& _mesh, Scalar _error_tolerance = FLT_MAX) :
         Base(_mesh, true), mesh_(Base::mesh()), tolerance_(_error_tolerance) {
       mesh_.add_property(points_);
     }

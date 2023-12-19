@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -180,11 +180,6 @@ public:
     max_deviation_ = _d / 180.0 * M_PI;
     min_cos_       = cos(max_deviation_);
   }
-
-private:
-
-  // hide this method
-  void set_binary(bool _b) {}
 
 private:
 

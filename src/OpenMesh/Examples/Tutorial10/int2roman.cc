@@ -27,11 +27,9 @@ std::string int2roman( size_t decimal, size_t length )
   size_t power;	// power of ten
   size_t index;  // Indexes thru values to subtract
   
-  std::string roman;
+  std::string roman('\0');
 
   roman.reserve(length);
-
-  roman[ 0 ] = '\0';
 
   for ( power = 0; power < nrows; power++ )
     for ( index = 0; index < ncols; index++ )

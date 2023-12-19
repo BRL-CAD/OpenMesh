@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -80,11 +80,6 @@ namespace IO {
 //-----------------------------------------------------------------------------
 // struct binary, helper for storing/restoring
 
-#define X \
-   std::ostringstream msg; \
-   msg << "Type not supported: " << typeid(value_type).name(); \
-   throw std::logic_error(msg.str())
-
 /// \struct binary SR_binary.hh <OpenMesh/Core/IO/SR_binary.hh>
 ///
 /// The struct defines how to store and restore the type T.
@@ -119,7 +114,11 @@ template < typename T, typename = void > struct binary
                 const value_type& /* _v */,
                 bool /* _swap */ = false ,
                 bool /* store_size */ = true ) // for vectors
-  { X; return 0; }
+  {
+      std::ostringstream msg;
+      msg << "Type not supported: " << typeid(value_type).name();
+      throw std::logic_error(msg.str());
+  }
 
   /// Restore a value of T and return the number of bytes read
   static 
@@ -127,7 +126,11 @@ template < typename T, typename = void > struct binary
                   value_type& /* _v */,
                   bool /* _swap */ = false ,
                   bool /* store_size */ = true ) // for vectors
-  { X; return 0; }
+  {
+      std::ostringstream msg;
+      msg << "Type not supported: " << typeid(value_type).name();
+      throw std::logic_error(msg.str());
+  }
 };
 
 #undef X

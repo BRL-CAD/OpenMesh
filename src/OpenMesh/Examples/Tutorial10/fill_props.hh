@@ -9,7 +9,7 @@ template <typename Mesh>
 bool 
 fill_props( Mesh& _m, OpenMesh::VPropHandleT<float> _ph, bool _check=false)
 {
-  static float a[9] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f };
+  const static float a[9] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f };
 
   for(typename Mesh::VertexIter it=_m.vertices_begin(); 
       it != _m.vertices_end(); ++it)
@@ -69,10 +69,10 @@ template <typename Mesh, typename T>
 bool 
 fill_props( Mesh& _m, OpenMesh::HPropHandleT<T> _ph, bool _check=false)
 {
-  static float a[9] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f };
-  static float b[9] = { 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f };
-  static float c[9] = { 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f, 2.2f };
-  static float d[9] = { 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f, 2.2f, 3.3f };
+  const static float a[9] = { 1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f };
+  const static float b[9] = { 2.2f, 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f };
+  const static float c[9] = { 3.3f, 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f, 2.2f };
+  const static float d[9] = { 4.4f, 5.5f, 6.6f, 7.7f, 8.8f, 9.9f, 1.1f, 2.2f, 3.3f };
 //  static double values[9] = { 0.1, 0.02, 0.003, 0.0004, 0.00005, 0.000006,
 //                              0.0000007, 0.00000008, 0.000000009 };
 

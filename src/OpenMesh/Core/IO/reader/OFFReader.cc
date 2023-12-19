@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -140,8 +140,7 @@ _OFFReader_::read(std::istream& _in, BaseImporter& _bi, Options& _opt )
    }
 
    // filter relevant options for reading
-   bool swap = _opt.check( Options::Swap );
-
+   bool swap_required = _opt.check( Options::Swap );
 
    userOptions_ = _opt;
 
@@ -159,7 +158,7 @@ _OFFReader_::read(std::istream& _in, BaseImporter& _bi, Options& _opt )
      options_ += Options::ColorAlpha;
 
     return (options_.is_binary() ?
- 	   read_binary(_in, _bi, _opt, swap) :
+       read_binary(_in, _bi, _opt, swap_required) :
 	   read_ascii(_in, _bi, _opt));
 
 }

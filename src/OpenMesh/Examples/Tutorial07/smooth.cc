@@ -5,7 +5,7 @@
 #include <OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
 #include <OpenMesh/Core/Mesh/Traits.hh>
 
-struct MyTraits : public OpenMesh::DefaultTraits
+struct MyMeshSmootherExampleTraits : public OpenMesh::DefaultTraits
 {
   // store barycenter of neighbors in this member
   VertexTraits
@@ -21,7 +21,7 @@ struct MyTraits : public OpenMesh::DefaultTraits
   };
 };
 
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits>  MyMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<MyMeshSmootherExampleTraits>  MyMesh;
 typedef OpenMesh::TriMesh_ArrayKernelT<>          MyMesh2;
 
 // ---------------------------------------------------------------------------

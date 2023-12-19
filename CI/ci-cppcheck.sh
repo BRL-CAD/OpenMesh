@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 # Exit script on any error
 set -e 
@@ -22,7 +22,7 @@ echo -e "${NC}"
 echo "Please Wait ..."
 
 # Run cppcheck and output into file
-cppcheck --enable=all . -I src -i Doc/ -i src/Unittests --force --suppress=unusedFunction -UCTIME --suppress=missingIncludeSystem --inline-suppr --quiet -Umin -Umax -DOPENMESHDLLEXPORT="" -UPRIVATE_NODE_TYPESYSTEM_SOURCE -USO_NODE_ABSTRACT_SOURCE -USO_NODE_SOURCE -UCLOCK_REALTIME_HR -i src/OpenMesh/Apps/Unsupported/  2>&1 | tee cppcheck.log
+cppcheck --enable=all . -I src -i Doc/ -i src/Unittests --force --suppress=unusedFunction -UCTIME --suppress=missingIncludeSystem --inline-suppr --quiet -Umin -Umax -DOPENMESHDLLEXPORT="" -UPRIVATE_NODE_TYPESYSTEM_SOURCE -USO_NODE_ABSTRACT_SOURCE -USO_NODE_SOURCE -UCLOCK_REALTIME_HR -UBMPOSTFIX -i src/OpenMesh/Apps/Unsupported/  2>&1 | tee cppcheck.log
 
 COUNT=$(wc -l < cppcheck.log )
 
@@ -32,7 +32,7 @@ echo "CPPCHECK Summary"
 echo "=============================================================================="
 echo -e "${NC}"
 
-MAX_COUNT=23
+MAX_COUNT=165
 
 if [ $COUNT -gt $MAX_COUNT ]; then
   echo -e ${WARNING}

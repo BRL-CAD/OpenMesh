@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -106,7 +106,7 @@ public:
 
 public:
 
-  VDPMSynthesizerViewerWidget(QWidget* _parent=0, const char* _name=0);
+  explicit VDPMSynthesizerViewerWidget(QWidget* _parent=0, const char* _name=0);
 
   ~VDPMSynthesizerViewerWidget();
 
@@ -144,12 +144,12 @@ private:
 
   void update_viewing_parameters();
 
-  virtual void keyPressEvent(QKeyEvent* _event);
+  virtual void keyPressEvent(QKeyEvent* _event) override;
 
 protected:
 
   /// inherited drawing method
-  virtual void draw_scene(const std::string& _draw_mode);
+  virtual void draw_scene(const std::string& _draw_mode) override;
 
 public:
 

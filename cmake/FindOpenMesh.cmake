@@ -15,7 +15,7 @@
 #===========================================================================
 #                                                                           
 #                               OpenMesh                                    
-#           Copyright (c) 2001-2015, RWTH-Aachen University                 
+#           Copyright (c) 2001-2023, RWTH-Aachen University                 
 #           Department of Computer Graphics and Multimedia                 
 #                          All rights reserved.                             
 #                            www.openmesh.org                               
@@ -53,7 +53,7 @@
 #                                                                            
 #===========================================================================
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.3.0)
 
 #if already found via finder or simulated finder in openmesh CMakeLists.txt, skip the search
 IF (NOT OPENMESH_FOUND) 
@@ -63,6 +63,8 @@ IF (NOT OPENMESH_FOUND)
     "${CMAKE_SOURCE_DIR}/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/libs_required/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/../OpenMesh/src/OpenMesh"
+    "C:/Program Files/OpenMesh 10.0"
+    "C:/Program Files/OpenMesh 9.0"
     "C:/Program Files/OpenMesh 8.1"
     "C:/Program Files/OpenMesh 8.0"
     "C:/Program Files/OpenMesh 7.2"
@@ -86,6 +88,8 @@ IF (NOT OPENMESH_FOUND)
     "C:/Program Files/OpenMesh 2.4.1"
     "C:/Program Files/OpenMesh 2.4"
     "C:/Program Files/OpenMesh 2.0/include"
+    "C:/libs/OpenMesh 10.0"
+    "C:/libs/OpenMesh 9.0"
     "C:/libs/OpenMesh 8.1"
     "C:/libs/OpenMesh 8.0"
     "C:/libs/OpenMesh 7.1"

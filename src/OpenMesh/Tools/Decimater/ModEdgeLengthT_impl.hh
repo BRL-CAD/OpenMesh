@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -72,7 +72,7 @@ ModEdgeLengthT<MeshT>::ModEdgeLengthT(MeshT &_mesh, float _edge_length,
 
 template<class MeshT>
 float ModEdgeLengthT<MeshT>::collapse_priority(const CollapseInfo& _ci) {
-  typename Mesh::Scalar sqr_length = (_ci.p0 - _ci.p1).sqrnorm();
+  typename Mesh::Scalar sqr_length = sqrnorm(_ci.p0 - _ci.p1);
 
   return ( (sqr_length <= sqr_edge_length_) ? sqr_length : float(Base::ILLEGAL_COLLAPSE));
 }
@@ -85,8 +85,8 @@ void ModEdgeLengthT<MeshT>::set_error_tolerance_factor(double _factor) {
     // the smaller the factor, the smaller edge_length_ gets
     // thus creating a stricter constraint
     // division by error_tolerance_factor_ is for normalization
-    typename Mesh::Scalar edge_length = edge_length_ * static_cast<typename Mesh::Scalar>(_factor / this->error_tolerance_factor_);
-    set_edge_length(edge_length);
+    typename Mesh::Scalar new_edge_length = edge_length_ * static_cast<typename Mesh::Scalar>(_factor / this->error_tolerance_factor_);
+    set_edge_length(new_edge_length);
     this->error_tolerance_factor_ = _factor;
   }
 }

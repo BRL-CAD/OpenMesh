@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -174,7 +174,7 @@ PolyConnectivity::add_face(const VertexHandle* _vertex_handles, size_t _vhs_size
         // search a free gap
         // free gap will be between boundary_prev and boundary_next
         outer_prev = opposite_halfedge_handle(inner_next);
-        outer_next = opposite_halfedge_handle(inner_prev);
+        //outer_next = opposite_halfedge_handle(inner_prev);
         boundary_prev = outer_prev;
         do
           boundary_prev =
@@ -494,11 +494,8 @@ void PolyConnectivity::delete_vertex(VertexHandle _vh, bool _delete_isolated_ver
 
 
   // delete collected faces
-  std::vector<FaceHandle>::iterator fh_it(face_handles.begin()),
-                                    fh_end(face_handles.end());
-
-  for (; fh_it!=fh_end; ++fh_it)
-    delete_face(*fh_it, _delete_isolated_vertices);
+  for (auto delete_fh_it : face_handles)
+    delete_face(delete_fh_it, _delete_isolated_vertices);
 
   status(_vh).set_deleted(true);
 }

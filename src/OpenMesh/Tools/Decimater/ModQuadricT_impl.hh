@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -139,8 +139,8 @@ void ModQuadricT<MeshT>::set_error_tolerance_factor(double _factor) {
       // the smaller the factor, the smaller max_err_ gets
       // thus creating a stricter constraint
       // division by error_tolerance_factor_ is for normalization
-      double max_err = max_err_ * _factor / this->error_tolerance_factor_;
-      set_max_err(max_err);
+      double new_max_err = max_err_ * _factor / this->error_tolerance_factor_;
+      set_max_err(new_max_err);
       this->error_tolerance_factor_ = _factor;
 
       initialize();

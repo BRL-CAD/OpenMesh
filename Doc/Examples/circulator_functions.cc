@@ -32,3 +32,16 @@ FaceEdgeIter OpenMesh::PolyConnectivity::fe_iter (FaceHandle _fh);
 
 // Get the face-face circulator of face _fh
 FaceFaceIter OpenMesh::PolyConnectivity::ff_iter (FaceHandle _fh);
+
+/**************************************************
+ * Edge circulators
+ **************************************************/
+
+// Get the edge-vertex circulator of edge _eh
+EdgeVertexIter OpenMesh::PolyConnectivity::ev_iter (EdgeHandle _eh);
+
+// Get the edge-halfedge circulator of edge _eh
+EdgeHalfedgeIter OpenMesh::PolyConnectivity::eh_iter (EdgeHandle _eh);
+
+// Get the edge-face circulator of of edge _eh
+EdgeFaceIter OpenMesh::PolyConnectivity::ef_iter (EdgeHandle _eh);

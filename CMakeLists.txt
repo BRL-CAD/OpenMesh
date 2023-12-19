@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
 
 
 # Set and enforce C++-11 flags
-set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
-set( CMAKE_CXX_STANDARD 11 )
+#set( CMAKE_CXX_STANDARD_REQUIRED TRUE )
+#set( CMAKE_CXX_STANDARD 11 )
 
 enable_testing()
 
 
 project (OpenMesh 
-         VERSION 9.0.0
+         VERSION 10.0.0
          LANGUAGES C CXX ) 
 
 # Set AUTO UIC/MOC Policy to new for CMAKE 3.17 or higher

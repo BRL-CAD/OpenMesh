@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -96,6 +96,7 @@ public:
   /// default constructor
   explicit ProgViewerWidget(QWidget* _parent=0)
     : MeshViewerWidgetProgBase(_parent),
+      animateRefinement_(true),
       n_base_vertices_(0),
       n_base_faces_(0),
       n_detail_vertices_(0),

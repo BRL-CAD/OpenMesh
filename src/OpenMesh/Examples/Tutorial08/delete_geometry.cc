@@ -49,7 +49,7 @@
 
 // ----------------------------------------------------------------------------
 
-struct MyTraits : public OpenMesh::DefaultTraits
+struct MyDeleteGeometryExampleTraits : public OpenMesh::DefaultTraits
 {
   VertexAttributes(OpenMesh::Attributes::Status);
   FaceAttributes(OpenMesh::Attributes::Status);
@@ -57,7 +57,7 @@ struct MyTraits : public OpenMesh::DefaultTraits
 };
 
 
-typedef OpenMesh::PolyMesh_ArrayKernelT<MyTraits>  MyMesh;
+typedef OpenMesh::PolyMesh_ArrayKernelT<MyDeleteGeometryExampleTraits>  MyMesh;
 
 
 // ----------------------------------------------------------------------------

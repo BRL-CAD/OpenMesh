@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -88,7 +88,7 @@ class ModAspectRatioT: public ModBaseT<MeshT> {
     typedef typename Mesh::Point Point;
 
     /// constructor
-    ModAspectRatioT(MeshT& _mesh, float _min_aspect = 5.0, bool _is_binary =
+    explicit ModAspectRatioT(MeshT& _mesh, float _min_aspect = 5.0, bool _is_binary =
         true) :
         Base(_mesh, _is_binary), mesh_(Base::mesh()), min_aspect_(
             1.f / _min_aspect) {

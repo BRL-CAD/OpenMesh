@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -407,7 +407,7 @@ open_vd_prog_mesh(const char* _filename)
   }
 
   //
-  bool swap = Endian::local() != Endian::LSB;
+  bool swap_required = Endian::local() != Endian::LSB;
 
   // read header  
   ifs.read(fileformat, 10); fileformat[10] = '\0';
@@ -418,9 +418,9 @@ open_vd_prog_mesh(const char* _filename)
     exit(1);
   }
 
-  IO::restore(ifs, n_base_vertices_, swap);
-  IO::restore(ifs, n_base_faces_, swap);
-  IO::restore(ifs, n_details_, swap);
+  IO::restore(ifs, n_base_vertices_, swap_required);
+  IO::restore(ifs, n_base_faces_, swap_required);
+  IO::restore(ifs, n_details_, swap_required);
   
   mesh_.clear();
   vfront_.clear();
@@ -431,12 +431,12 @@ open_vd_prog_mesh(const char* _filename)
   // load base mesh
   for (i=0; i<n_base_vertices_; ++i)
   {
-    IO::restore(ifs, p, swap);
-    IO::restore(ifs, radius, swap);
-    IO::restore(ifs, normal, swap);
-    IO::restore(ifs, sin_square, swap);
-    IO::restore(ifs, mue_square, swap);
-    IO::restore(ifs, sigma_square, swap);
+    IO::restore(ifs, p, swap_required);
+    IO::restore(ifs, radius, swap_required);
+    IO::restore(ifs, normal, swap_required);
+    IO::restore(ifs, sin_square, swap_required);
+    IO::restore(ifs, mue_square, swap_required);
+    IO::restore(ifs, sigma_square, swap_required);
 
     vertex_handle = mesh_.add_vertex(p);
     node_index    = vhierarchy_.generate_node_index(i, 1);
@@ -462,9 +462,9 @@ open_vd_prog_mesh(const char* _filename)
 
   for (i=0; i<n_base_faces_; ++i)
   {
-    IO::restore(ifs, fvi[0], swap);
-    IO::restore(ifs, fvi[1], swap);
-    IO::restore(ifs, fvi[2], swap);
+    IO::restore(ifs, fvi[0], swap_required);
+    IO::restore(ifs, fvi[1], swap_required);
+    IO::restore(ifs, fvi[2], swap_required);
 
     mesh_.add_face(mesh_.vertex_handle(fvi[0]),
 		   mesh_.vertex_handle(fvi[1]),
@@ -475,16 +475,16 @@ open_vd_prog_mesh(const char* _filename)
   for (i=0; i<n_details_; ++i)
   {
     // position of v0
-    IO::restore(ifs, p, swap);
+    IO::restore(ifs, p, swap_required);
     
     // vsplit info.
-    IO::restore(ifs, value, swap);
+    IO::restore(ifs, value, swap_required);
     node_index = VHierarchyNodeIndex(value);
 
-    IO::restore(ifs, value, swap);
+    IO::restore(ifs, value, swap_required);
     fund_lcut_index = VHierarchyNodeIndex(value);
 
-    IO::restore(ifs, value, swap);
+    IO::restore(ifs, value, swap_required);
     fund_rcut_index = VHierarchyNodeIndex(value);
 
 
@@ -506,22 +506,22 @@ open_vd_prog_mesh(const char* _filename)
     index2handle_map[rchild.node_index()] = node.rchild_handle();
 
     // view-dependent parameters
-    IO::restore(ifs, radius, swap);
-    IO::restore(ifs, normal, swap);
-    IO::restore(ifs, sin_square, swap);
-    IO::restore(ifs, mue_square, swap);
-    IO::restore(ifs, sigma_square, swap);
+    IO::restore(ifs, radius, swap_required);
+    IO::restore(ifs, normal, swap_required);
+    IO::restore(ifs, sin_square, swap_required);
+    IO::restore(ifs, mue_square, swap_required);
+    IO::restore(ifs, sigma_square, swap_required);
     lchild.set_radius(radius);
     lchild.set_normal(normal);
     lchild.set_sin_square(sin_square);
     lchild.set_mue_square(mue_square);
     lchild.set_sigma_square(sigma_square);
 
-    IO::restore(ifs, radius, swap);
-    IO::restore(ifs, normal, swap);
-    IO::restore(ifs, sin_square, swap);
-    IO::restore(ifs, mue_square, swap);
-    IO::restore(ifs, sigma_square, swap);
+    IO::restore(ifs, radius, swap_required);
+    IO::restore(ifs, normal, swap_required);
+    IO::restore(ifs, sin_square, swap_required);
+    IO::restore(ifs, mue_square, swap_required);
+    IO::restore(ifs, sigma_square, swap_required);
     rchild.set_radius(radius);
     rchild.set_normal(normal);
     rchild.set_sin_square(sin_square);

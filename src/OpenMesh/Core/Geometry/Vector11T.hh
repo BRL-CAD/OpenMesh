@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -170,8 +170,9 @@ class VectorT {
         }
 
         /// construct from an array
-        explicit VectorT(container&& _array) {
-            values_ = _array;
+        explicit VectorT(container&& _array) :
+            values_(_array)
+        {
         }
 
         /// copy & cast constructor (explicit)

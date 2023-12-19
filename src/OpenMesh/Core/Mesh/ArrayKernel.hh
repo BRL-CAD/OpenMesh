@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -298,7 +298,9 @@ public:
    *
    * \note Garbage collection invalidates all handles. If you need to keep track of
    *       a set of handles, you can pass them to this function. The handles that the
-   *       given pointers point to are updated in place.
+   *       given pointers point to are updated in place. Warning: You cannot update 
+   *       handles stored in a mesh property, as the memory might be moved
+   *       during garbage collection! 
    *       See also \ref deletedElements.
    *
    * @param vh_to_update Pointers to vertex handles that should get updated
@@ -469,7 +471,7 @@ public:
   { return next_halfedge_handle(opposite_halfedge_handle(_heh)); }
 
   // --- edge connectivity ---
-  static HalfedgeHandle s_halfedge_handle(EdgeHandle _eh, unsigned int _i)
+  static HalfedgeHandle s_halfedge_handle(EdgeHandle _eh, unsigned int _i = 0)
   {
     assert(_i<=1);
     return HalfedgeHandle((_eh.idx() << 1) + _i);
@@ -478,7 +480,7 @@ public:
   static EdgeHandle s_edge_handle(HalfedgeHandle _heh)
   { return EdgeHandle(_heh.idx() >> 1); }
 
-  HalfedgeHandle halfedge_handle(EdgeHandle _eh, unsigned int _i) const
+  HalfedgeHandle halfedge_handle(EdgeHandle _eh, unsigned int _i = 0) const
   {
       return s_halfedge_handle(_eh, _i);
   }
@@ -736,7 +738,7 @@ public:
     typedef typename HandleContainer::const_iterator
                                             const_iterator;
   public:
-    ExtStatusSetT(ArrayKernel& _kernel, size_t _capacity_hint = 0)
+    explicit ExtStatusSetT(ArrayKernel& _kernel, size_t _capacity_hint = 0)
     : Base(_kernel)
     { handles_.reserve(_capacity_hint); }
 

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -229,7 +229,10 @@ replace_extension( std::string& _s, const std::string& _e )
   if (dot == std::string::npos)
   { _s += "." + _e; }
   else
-  { _s = _s.substr(0,dot+1)+_e; }
+  { 
+    const std::string temp_name = _s.substr(0,dot+1);
+    _s = temp_name + _e; 
+  }
   return _s;
 }
 

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -104,7 +104,7 @@ public:
 public:
 
   /// Constructor
-  ModNormalDeviationT(MeshT& _mesh, float _max_dev = 180.0)
+  explicit ModNormalDeviationT(MeshT& _mesh, float _max_dev = 180.0)
   : Base(_mesh, true), mesh_(Base::mesh())
   {
     set_normal_deviation(_max_dev);

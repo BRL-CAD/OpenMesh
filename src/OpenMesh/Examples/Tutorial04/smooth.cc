@@ -11,14 +11,14 @@
 
 #ifndef DOXY_IGNORE_THIS
 
-struct MyTraits : public OpenMesh::DefaultTraits
+struct MySmootherExampleTraits : public OpenMesh::DefaultTraits
 {
   HalfedgeAttributes(OpenMesh::Attributes::PrevHalfedge);
 };
 
 #endif
 
-typedef OpenMesh::TriMesh_ArrayKernelT<MyTraits>  MyMesh;
+typedef OpenMesh::TriMesh_ArrayKernelT<MySmootherExampleTraits>  MyMesh;
 
 
 // ----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -84,13 +84,13 @@
 
 using namespace OpenMesh;
 
-struct MyTraits : public DEFAULT_TRAITS
+struct MyDecimaterViewerWidgetTraits : public DEFAULT_TRAITS
 {
   VertexAttributes  ( Attributes::Normal       );
   FaceAttributes    ( Attributes::Normal       );  
 };
 
-typedef TRIMESH_KERNEL<MyTraits>                     mesh_t;
+typedef TRIMESH_KERNEL<MyDecimaterViewerWidgetTraits>                     mesh_t;
 typedef MeshViewerWidgetT<mesh_t>                    MeshViewerWidgetDecimaterBase;
 
 //== CLASS DEFINITION =========================================================

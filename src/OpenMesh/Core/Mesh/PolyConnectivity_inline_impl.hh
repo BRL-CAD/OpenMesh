@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -183,6 +183,22 @@ inline PolyConnectivity::ConstFaceFaceRange PolyConnectivity::ff_range(FaceHandl
     return ConstFaceFaceRange(*this, _fh);
 }
 
+inline PolyConnectivity::ConstEdgeVertexRange PolyConnectivity::ev_range(EdgeHandle _eh) const {
+    return ConstEdgeVertexRange(*this, _eh);
+}
+
+inline PolyConnectivity::ConstEdgeHalfedgeRange PolyConnectivity::eh_range(EdgeHandle _eh) const {
+    return ConstEdgeHalfedgeRange(*this, _eh);
+}
+
+inline PolyConnectivity::ConstEdgeHalfedgeRange PolyConnectivity::eh_range(HalfedgeHandle _heh) const {
+    return ConstEdgeHalfedgeRange(*this, _heh, 1);
+}
+
+inline PolyConnectivity::ConstEdgeFaceRange PolyConnectivity::ef_range(EdgeHandle _eh) const {
+    return ConstEdgeFaceRange(*this, _eh);
+}
+
 inline PolyConnectivity::ConstHalfedgeLoopRange PolyConnectivity::hl_range(HalfedgeHandle _heh) const {
     return ConstHalfedgeLoopRange(*this, _heh);
 }
@@ -281,6 +297,7 @@ inline PolyConnectivity::ConstFaceEdgeCCWRange PolyConnectivity::fe_ccw_range(Fa
 inline PolyConnectivity::ConstFaceFaceCCWRange PolyConnectivity::ff_ccw_range(FaceHandle _fh) const {
     return ConstFaceFaceCCWRange(*this, _fh);
 }
+
 
 inline PolyConnectivity::ConstHalfedgeLoopCCWRange PolyConnectivity::hl_ccw_range(HalfedgeHandle _heh) const {
     return ConstHalfedgeLoopCCWRange(*this, _heh);
@@ -523,6 +540,24 @@ inline PolyConnectivity::ConstFaceFaceCWIter PolyConnectivity::cff_cwiter(ArrayK
 inline PolyConnectivity::ConstFaceFaceCCWIter PolyConnectivity::cff_ccwiter(ArrayKernel::FaceHandle _fh) const
 { return ConstFaceFaceCCWIter(*this, _fh); }
 
+inline PolyConnectivity::EdgeVertexIter PolyConnectivity::ev_iter(ArrayKernel::EdgeHandle _eh)
+{ return EdgeVertexIter(*this, _eh); }
+
+inline PolyConnectivity::EdgeHalfedgeIter PolyConnectivity::eh_iter(ArrayKernel::EdgeHandle _eh)
+{ return EdgeHalfedgeIter(*this, _eh); }
+
+inline PolyConnectivity::EdgeFaceIter PolyConnectivity::ef_iter(ArrayKernel::EdgeHandle _eh)
+{ return EdgeFaceIter(*this, _eh); }
+
+inline PolyConnectivity::ConstEdgeVertexIter PolyConnectivity::cev_iter(ArrayKernel::EdgeHandle _eh) const
+{ return ConstEdgeVertexIter(*this, _eh); }
+
+inline PolyConnectivity::ConstEdgeHalfedgeIter PolyConnectivity::ceh_iter(ArrayKernel::EdgeHandle _eh) const
+{ return ConstEdgeHalfedgeIter(*this, _eh); }
+
+inline PolyConnectivity::ConstEdgeFaceIter PolyConnectivity::cef_iter(ArrayKernel::EdgeHandle _eh) const
+{ return ConstEdgeFaceIter(*this, _eh); }
+
 
 inline PolyConnectivity::VertexVertexIter PolyConnectivity::vv_begin(VertexHandle _vh)
 { return VertexVertexIter(*this, _vh); }
@@ -706,6 +741,27 @@ inline PolyConnectivity::ConstHalfedgeLoopCWIter PolyConnectivity::chl_cwbegin(H
 
 inline PolyConnectivity::ConstHalfedgeLoopCCWIter PolyConnectivity::chl_ccwbegin(HalfedgeHandle _heh) const
 { return ConstHalfedgeLoopCCWIter(*this, _heh); }
+
+
+inline PolyConnectivity::EdgeVertexIter PolyConnectivity::ev_begin(EdgeHandle _eh)
+{ return EdgeVertexIter(*this, _eh); }
+
+inline PolyConnectivity::EdgeHalfedgeIter PolyConnectivity::eh_begin(EdgeHandle _eh)
+{ return EdgeHalfedgeIter(*this, _eh); }
+
+inline PolyConnectivity::EdgeFaceIter PolyConnectivity::ef_begin(EdgeHandle _eh)
+{ return EdgeFaceIter(*this, _eh); }
+
+
+inline PolyConnectivity::ConstEdgeVertexIter PolyConnectivity::cev_begin(EdgeHandle _eh) const
+{ return ConstEdgeVertexIter(*this, _eh); }
+
+inline PolyConnectivity::ConstEdgeHalfedgeIter PolyConnectivity::ceh_begin(EdgeHandle _eh) const
+{ return ConstEdgeHalfedgeIter(*this, _eh); }
+
+inline PolyConnectivity::ConstEdgeFaceIter PolyConnectivity::cef_begin(EdgeHandle _eh) const
+{ return ConstEdgeFaceIter(*this, _eh); }
+
 
 // 'end' circulators
 
@@ -893,6 +949,26 @@ inline PolyConnectivity::ConstHalfedgeLoopCCWIter PolyConnectivity::chl_ccwend(H
 { return ConstHalfedgeLoopCCWIter(*this, _heh, true); }
 
 
+inline PolyConnectivity::EdgeVertexIter PolyConnectivity::ev_end(EdgeHandle _eh)
+{ return EdgeVertexIter(*this, _eh, true); }
+
+inline PolyConnectivity::EdgeHalfedgeIter PolyConnectivity::eh_end(EdgeHandle _eh)
+{ return EdgeHalfedgeIter(*this, _eh, true); }
+
+inline PolyConnectivity::EdgeFaceIter PolyConnectivity::ef_end(EdgeHandle _eh)
+{ return EdgeFaceIter(*this, _eh, true); }
+
+
+inline PolyConnectivity::ConstEdgeVertexIter PolyConnectivity::cev_end(EdgeHandle _eh) const
+{ return ConstEdgeVertexIter(*this, _eh, true); }
+
+inline PolyConnectivity::ConstEdgeHalfedgeIter PolyConnectivity::ceh_end(EdgeHandle _eh) const
+{ return ConstEdgeHalfedgeIter(*this, _eh, true); }
+
+inline PolyConnectivity::ConstEdgeFaceIter PolyConnectivity::cef_end(EdgeHandle _eh) const
+{ return ConstEdgeFaceIter(*this, _eh, true); }
+
+
 inline PolyConnectivity::ConstVertexFaceRange         SmartVertexHandle::faces()                                     const { assert(mesh() != nullptr); return mesh()->vf_range    (*this); }
 inline PolyConnectivity::ConstVertexFaceCWRange       SmartVertexHandle::faces_cw()                                  const { assert(mesh() != nullptr); return mesh()->vf_cw_range (*this); }
 inline PolyConnectivity::ConstVertexFaceCCWRange      SmartVertexHandle::faces_ccw()                                 const { assert(mesh() != nullptr); return mesh()->vf_ccw_range(*this); }
@@ -942,5 +1018,14 @@ inline PolyConnectivity::ConstFaceEdgeCCWRange        SmartFaceHandle::edges_ccw
 inline PolyConnectivity::ConstFaceFaceRange           SmartFaceHandle::faces()                                       const { assert(mesh() != nullptr); return mesh()->ff_range    (*this); }
 inline PolyConnectivity::ConstFaceFaceCWRange         SmartFaceHandle::faces_cw()                                    const { assert(mesh() != nullptr); return mesh()->ff_cw_range (*this); }
 inline PolyConnectivity::ConstFaceFaceCCWRange        SmartFaceHandle::faces_ccw()                                   const { assert(mesh() != nullptr); return mesh()->ff_ccw_range(*this); }
+
+
+inline PolyConnectivity::ConstEdgeVertexRange         SmartEdgeHandle::vertices()                                    const { assert(mesh() != nullptr); return mesh()->ev_range    (*this); }
+
+inline PolyConnectivity::ConstEdgeHalfedgeRange       SmartEdgeHandle::halfedges()                                   const { assert(mesh() != nullptr); return mesh()->eh_range    (*this); }
+
+inline PolyConnectivity::ConstEdgeHalfedgeRange       SmartEdgeHandle::halfedges(HalfedgeHandle _heh)                const { assert(mesh() != nullptr); return mesh()->eh_range    (_heh);  }
+
+inline PolyConnectivity::ConstEdgeFaceRange           SmartEdgeHandle::faces()                                       const { assert(mesh() != nullptr); return mesh()->ef_range    (*this); }
 
 }//namespace OpenMesh

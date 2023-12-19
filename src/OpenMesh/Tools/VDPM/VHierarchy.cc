@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -99,16 +99,16 @@ add_node(const VHierarchyNode &_node)
 
 void
 VHierarchy::
-make_children(VHierarchyNodeHandle &_parent_handle)
+make_children(const VHierarchyNodeHandle &_parent_handle)
 {
-  VHierarchyNodeHandle lchild_handle = add_node();
-  VHierarchyNodeHandle rchild_handle = add_node();    
+  VHierarchyNodeHandle new_lchild_handle = add_node();
+  VHierarchyNodeHandle new_rchild_handle = add_node();
 
   VHierarchyNode &parent = node(_parent_handle);
-  VHierarchyNode &lchild = node(lchild_handle);
-  VHierarchyNode &rchild = node(rchild_handle);
+  VHierarchyNode &lchild = node(new_lchild_handle);
+  VHierarchyNode &rchild = node(new_rchild_handle);
 
-  parent.set_children_handle(lchild_handle);
+  parent.set_children_handle(new_lchild_handle);
   lchild.set_parent_handle(_parent_handle);
   rchild.set_parent_handle(_parent_handle);
 

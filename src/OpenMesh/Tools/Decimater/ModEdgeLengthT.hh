@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -79,7 +79,7 @@ class ModEdgeLengthT: public ModBaseT<MeshT> {
     ;
 
     /// Constructor
-    ModEdgeLengthT(MeshT& _mesh, float _edge_length = FLT_MAX,
+    explicit ModEdgeLengthT(MeshT& _mesh, float _edge_length = FLT_MAX,
         bool _is_binary = true);
 
     /// get edge_length

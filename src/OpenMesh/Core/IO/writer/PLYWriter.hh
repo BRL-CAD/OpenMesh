@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -98,11 +98,11 @@ public:
   std::string get_description() const override { return "PLY polygon file format"; }
   std::string get_extensions()  const override  { return "ply"; }
 
-  bool write(const std::string&, BaseExporter&, Options, std::streamsize _precision = 6) const override;
+  bool write(const std::string&, BaseExporter&, const Options& _writeOptions, std::streamsize _precision = 6) const override;
 
-  bool write(std::ostream&, BaseExporter&, Options, std::streamsize _precision = 6) const override;
+  bool write(std::ostream&, BaseExporter&, const Options& _writeOptions, std::streamsize _precision = 6) const override;
 
-  size_t binary_size(BaseExporter& _be, Options _opt) const override;
+  size_t binary_size(BaseExporter& _be, const Options& _opt) const override;
 
   enum ValueType {
     Unsupported = 0,
@@ -135,7 +135,7 @@ private:
     writeValue(_type, _out, _value);
   }
   template<typename T>
-  void writeProxy(ValueType _type, std::ostream& _out, T _value, OpenMesh::GenProg::FalseType /*_binary*/) const
+  void writeProxy(ValueType /*_type*/, std::ostream& _out, T _value, OpenMesh::GenProg::FalseType /*_binary*/) const
   {
     _out << " " << _value;
   }

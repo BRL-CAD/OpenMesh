@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -97,6 +97,7 @@ struct ArrayItems
 
   //TODO: should be selected with config.h define
   typedef Halfedge_with_prev                Halfedge;
+  typedef Halfedge_without_prev             HalfedgeNoPrev;
   typedef GenProg::Bool2Type<true>          HasPrevHalfedge;
 
   //-------------------------------------------------------- internal edge type

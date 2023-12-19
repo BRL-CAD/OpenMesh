@@ -126,7 +126,7 @@ Gnuplot::Gnuplot(const string &style)
 Gnuplot::Gnuplot(const string &title,
                  const string &style,
                  const string &labelx,  const string &labely,
-                 vector<double> x, vector<double> y)
+                 const vector<double>& x, const vector<double>& y)
 {
   init();
 		
@@ -157,7 +157,7 @@ Gnuplot::Gnuplot(const string &title,
 
 Gnuplot::Gnuplot(const string &title,  const string &style,
                  const string &labelx, const string &labely,
-                 vector<double> x)
+                 const vector<double>& x)
 {
   init();
   
@@ -349,7 +349,7 @@ void Gnuplot::plot_equation(const string &equation, const string &title)
 
 // ----------------------------------------------------------------------------
 
-void Gnuplot::plot_x(vector<double> d, const string &title)
+void Gnuplot::plot_x(const vector<double>& d, const string &title)
 {
   ofstream tmp;
   ostringstream cmdstr;
@@ -418,7 +418,7 @@ void Gnuplot::plot_x(vector<double> d, const string &title)
 
 // ----------------------------------------------------------------------------
     
-void Gnuplot::plot_xy(vector<double> x, vector<double> y, const string &title)
+void Gnuplot::plot_xy(const vector<double>& x, const vector<double>& y, const string &title)
 {
   ofstream tmp;
   ostringstream cmdstr;

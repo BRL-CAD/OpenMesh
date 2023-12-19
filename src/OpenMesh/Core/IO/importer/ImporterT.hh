@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -121,14 +121,12 @@ public:
       VHandles::const_iterator it, it2, end(_indices.end());
 
 
-      // test for valid vertex indices
-      for (it=_indices.begin(); it!=end; ++it)
-        if (! mesh_.is_valid_handle(*it))
-        {
+      // Test if all vertex handles are valid. If not, we throw an error.
+      if ( std::any_of(_indices.begin(),_indices.end(),[this](const VertexHandle& vh){ return !mesh_.is_valid_handle(vh); } ) )
+      {
           omerr() << "ImporterT: Face contains invalid vertex index\n";
           return fh;
-        }
-
+      }
 
       // don't allow double vertices
       for (it=_indices.begin(); it!=end; ++it)
@@ -443,8 +441,9 @@ public:
       mesh_.add_property(property,"TextureMapping");
     }
 
-    if ( mesh_.property(property).find( _id ) == mesh_.property(property).end() )
+    if ( mesh_.property(property).find( _id ) == mesh_.property(property).end() ) {
       mesh_.property(property)[_id] = _name;
+    }
   }
 
   // low-level access to mesh

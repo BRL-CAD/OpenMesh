@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -380,6 +380,53 @@ public:
   typedef FaceFaceCCWIter       ConstFaceFaceCCWIter;
 
   /*
+   * Edge-centered circulators
+   */
+
+  struct EdgeVertexTraits
+  {
+    using Mesh = This;
+    using CenterEntityHandle = This::EdgeHandle;
+    using ValueHandle = This::VertexHandle;
+    static ValueHandle toHandle(const Mesh* const _mesh, This::HalfedgeHandle _heh) { return static_cast<const ArrayKernel*>(_mesh)->from_vertex_handle(_heh); }
+  };
+
+  /**
+   * Enumerate vertices incident to an edge.
+   */
+  typedef Iterators::GenericCirculatorT_DEPRECATED<EdgeVertexTraits> EdgeVertexIter;
+
+  struct EdgeHalfedgeTraits
+  {
+    using Mesh = This;
+    using CenterEntityHandle = This::EdgeHandle;
+    using ValueHandle = This::HalfedgeHandle;
+    static ValueHandle toHandle(const Mesh* const /* _mesh */, This::HalfedgeHandle _heh) { return _heh; }
+  };
+
+  /**
+   * Enumerate the halfedges of an edge.
+   */
+  typedef Iterators::GenericCirculatorT_DEPRECATED<EdgeHalfedgeTraits> EdgeHalfedgeIter;
+
+  struct EdgeFaceTraits
+  {
+    using Mesh = This;
+    using CenterEntityHandle = This::EdgeHandle;
+    using ValueHandle = This::FaceHandle;
+    static ValueHandle toHandle(const Mesh* const _mesh, This::HalfedgeHandle _heh) { return static_cast<const ArrayKernel*>(_mesh)->face_handle(_heh); }
+  };
+
+  /**
+   * Enumerate faces incident to an edge.
+   */
+  typedef Iterators::GenericCirculatorT_DEPRECATED<EdgeFaceTraits> EdgeFaceIter;
+
+  typedef EdgeVertexIter      ConstEdgeVertexIter;
+  typedef EdgeHalfedgeIter    ConstEdgeHalfedgeIter;
+  typedef EdgeFaceIter        ConstEdgeFaceIter;
+
+  /*
    * Halfedge circulator
    */
   typedef HalfedgeLoopIter      ConstHalfedgeLoopIter;
@@ -435,6 +482,9 @@ public:
   typedef FaceEdgeCWIter          FECWIter;
   typedef FaceEdgeCCWIter         FECWWIter;
   typedef FaceFaceIter            FFIter;
+  typedef EdgeVertexIter          EVIter;
+  typedef EdgeHalfedgeIter        EHIter;
+  typedef EdgeFaceIter            EFIter;
 
   typedef ConstVertexVertexIter         CVVIter;
   typedef ConstVertexVertexCWIter       CVVCWIter;
@@ -463,6 +513,9 @@ public:
   typedef ConstFaceFaceIter             CFFIter;
   typedef ConstFaceFaceCWIter           CFFCWIter;
   typedef ConstFaceFaceCCWIter          CFFCCWIter;
+  typedef ConstEdgeVertexIter           CEVIter;
+  typedef ConstEdgeHalfedgeIter         CEHIter;
+  typedef ConstEdgeFaceIter             CEFIter;
   //@}
 
 public:
@@ -600,14 +653,14 @@ public:
   using ArrayKernel::s_halfedge_handle;
   using ArrayKernel::s_edge_handle;
 
-  static SmartHalfedgeHandle s_halfedge_handle(SmartEdgeHandle _eh, unsigned int _i);
+  static SmartHalfedgeHandle s_halfedge_handle(SmartEdgeHandle _eh, unsigned int _i = 0);
   static SmartEdgeHandle s_edge_handle(SmartHalfedgeHandle _heh);
 
   using ArrayKernel::halfedge_handle;
   using ArrayKernel::edge_handle;
   using ArrayKernel::face_handle;
 
-  inline SmartHalfedgeHandle halfedge_handle(SmartEdgeHandle _eh, unsigned int _i) const;
+  inline SmartHalfedgeHandle halfedge_handle(SmartEdgeHandle _eh, unsigned int _i = 0) const;
   inline SmartHalfedgeHandle halfedge_handle(SmartFaceHandle _fh) const;
   inline SmartHalfedgeHandle halfedge_handle(SmartVertexHandle _vh) const;
   inline SmartEdgeHandle edge_handle(SmartHalfedgeHandle _heh) const;
@@ -688,7 +741,7 @@ public:
 
   //--- circulators ---
 
-  /** \name Vertex and Face circulators
+  /** \name Vertex, Face, and Edge circulators
   */
   //@{
 
@@ -803,6 +856,20 @@ public:
   ConstFaceFaceCWIter cff_cwiter(FaceHandle _fh) const;
   /// const face - face circulator
   ConstFaceFaceCCWIter cff_ccwiter(FaceHandle _fh) const;
+
+  /// edge - vertex circulator
+  EdgeVertexIter ev_iter(EdgeHandle _eh);
+  /// edge - halfedge circulator
+  EdgeHalfedgeIter eh_iter(EdgeHandle _eh);
+  /// edge - face circulator
+  EdgeFaceIter ef_iter(EdgeHandle _eh);
+
+  /// const edge - vertex circulator
+  ConstEdgeVertexIter cev_iter(EdgeHandle _eh) const;
+  /// const edge - halfedge circulator
+  ConstEdgeHalfedgeIter ceh_iter(EdgeHandle _eh) const;
+  /// const edge - face circulator
+  ConstEdgeFaceIter cef_iter(EdgeHandle _eh) const;
   
   // 'begin' circulators
   
@@ -930,6 +997,20 @@ public:
   ConstHalfedgeLoopCWIter chl_cwbegin(HalfedgeHandle _heh) const;
   /// const halfedge circulator ccw
   ConstHalfedgeLoopCCWIter chl_ccwbegin(HalfedgeHandle _heh) const;
+
+  /// edge - vertex circulator
+  EdgeVertexIter ev_begin(EdgeHandle _eh);
+  /// edge - halfedge circulator
+  EdgeHalfedgeIter eh_begin(EdgeHandle _eh);
+  /// edge - face circulator
+  EdgeFaceIter ef_begin(EdgeHandle _eh);
+
+  /// const edge - vertex circulator
+  ConstEdgeVertexIter cev_begin(EdgeHandle _eh) const;
+  /// const edge - halfedge circulator
+  ConstEdgeHalfedgeIter ceh_begin(EdgeHandle _eh) const;
+  /// const edge - face circulator
+  ConstEdgeFaceIter cef_begin(EdgeHandle _eh) const;
   
   // 'end' circulators
   
@@ -1056,6 +1137,21 @@ public:
   ConstHalfedgeLoopCWIter chl_cwend(HalfedgeHandle _heh) const;
   /// const face - face circulator ccw
   ConstHalfedgeLoopCCWIter chl_ccwend(HalfedgeHandle _heh) const;
+
+  /// edge - vertex circulator
+  EdgeVertexIter ev_end(EdgeHandle _eh);
+  /// edge - halfedge circulator
+  EdgeHalfedgeIter eh_end(EdgeHandle _eh);
+  /// edge - face circulator
+  EdgeFaceIter ef_end(EdgeHandle _eh);
+
+  /// const edge - vertex circulator
+  ConstEdgeVertexIter cev_end(EdgeHandle _eh) const;
+  /// const edge - halfedge circulator
+  ConstEdgeHalfedgeIter ceh_end(EdgeHandle _eh) const;
+  /// const edge - face circulator
+  ConstEdgeFaceIter cef_end(EdgeHandle _eh) const;
+
   //@}
 
   /** @name Range based iterators and circulators */
@@ -1178,6 +1274,9 @@ public:
   typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstFaceHalfedgeIter      , FaceHandle    , HalfedgeHandle, &PolyConnectivity::cfh_begin     , &PolyConnectivity::cfh_end     >> ConstFaceHalfedgeRange;
   typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstFaceEdgeIter          , FaceHandle    , EdgeHandle    , &PolyConnectivity::cfe_begin     , &PolyConnectivity::cfe_end     >> ConstFaceEdgeRange;
   typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstFaceFaceIter          , FaceHandle    , FaceHandle    , &PolyConnectivity::cff_begin     , &PolyConnectivity::cff_end     >> ConstFaceFaceRange;
+  typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstEdgeVertexIter        , EdgeHandle    , VertexHandle  , &PolyConnectivity::cev_begin     , &PolyConnectivity::cev_end     >> ConstEdgeVertexRange;
+  typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstEdgeHalfedgeIter      , EdgeHandle    , HalfedgeHandle, &PolyConnectivity::ceh_begin     , &PolyConnectivity::ceh_end     >> ConstEdgeHalfedgeRange;
+  typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstEdgeFaceIter          , EdgeHandle    , FaceHandle,     &PolyConnectivity::cef_begin     , &PolyConnectivity::cef_end     >> ConstEdgeFaceRange;
   typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstHalfedgeLoopIter      , HalfedgeHandle, HalfedgeHandle, &PolyConnectivity::chl_begin     , &PolyConnectivity::chl_end     >> ConstHalfedgeLoopRange;
 
   typedef CirculatorRange<CirculatorRangeTraitT<PolyConnectivity, ConstVertexVertexCWIter    , VertexHandle  , VertexHandle  , &PolyConnectivity::cvv_cwbegin   , &PolyConnectivity::cvv_cwend   >> ConstVertexVertexCWRange;
@@ -1271,6 +1370,31 @@ public:
   ConstFaceFaceRange ff_range(FaceHandle _fh) const;
 
   /**
+   * @return The vertices incident to the specified edge
+   * as a range object suitable for C++11 range based for loops.
+   */
+  ConstEdgeVertexRange ev_range(EdgeHandle _eh) const;
+
+  /**
+   * @return The halfedges of the specified edge
+   * as a range object suitable for C++11 range based for loops.
+   */
+  ConstEdgeHalfedgeRange eh_range(EdgeHandle _eh) const;
+
+  /**
+   * @return The halfedges of the specified edge
+   * as a range object suitable for C++11 range based for loops.
+   * Like eh_range(_heh.edge()) but starts iteration at _heh
+   */
+  ConstEdgeHalfedgeRange eh_range(HalfedgeHandle _heh) const;
+
+  /**
+   * @return The faces incident to the specified edge
+   * as a range object suitable for C++11 range based for loops.
+   */
+  ConstEdgeFaceRange ef_range(EdgeHandle _eh) const;
+
+  /**
    * @return The halfedges in the face
    * as a range object suitable for C++11 range based for loops.
    */
@@ -1313,7 +1437,7 @@ public:
    * @return The edges incident to the specified vertex
    * as a range object suitable for C++11 range based for loops.
    */
-  ConstVertexEdgeCWRange ve_cw_range(VertexHandle _vh) const ;
+  ConstVertexEdgeCWRange ve_cw_range(VertexHandle _vh) const;
 
   /**
    * @return The faces incident to the specified vertex
@@ -1419,6 +1543,7 @@ public:
    * as a range object suitable for C++11 range based for loops.
    */
   ConstFaceFaceCCWRange ff_ccw_range(FaceHandle _fh) const;
+
 
   /**
    * @return The halfedges in the face

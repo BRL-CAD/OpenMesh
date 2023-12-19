@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2022, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -51,6 +51,7 @@
 
 // OpenMesh
 #include <OpenMesh/Core/System/config.h>
+#include <string>
 
 
 //== NAMESPACES ==============================================================
@@ -96,7 +97,7 @@ public:
   /// Definitions of %Options for reading and writing. The options can be
   /// or'ed.
   enum Flag {
-      Default        = 0x0000, ///< No options
+      None           = 0x0000, ///< No options
       Binary         = 0x0001, ///< Set binary mode for r/w
       MSB            = 0x0002, ///< Assume big endian byte ordering
       LSB            = 0x0004, ///< Assume little endian byte ordering
@@ -110,34 +111,28 @@ public:
       FaceTexCoord   = 0x0400, ///< Has (r) / store (w) face texture coordinates
       ColorAlpha     = 0x0800, ///< Has (r) / store (w) alpha values for colors
       ColorFloat     = 0x1000, ///< Has (r) / store (w) float values for colors (currently only implemented for PLY and OFF files)
-      Custom         = 0x2000, ///< Has (r)             custom properties (currently only implemented in PLY Reader ASCII version)
+      Custom         = 0x2000, ///< Has (r) / store (w) custom properties marked persistent (currently PLY only supports reading and only ASCII version. OM supports reading and writing)
       Status         = 0x4000, ///< Has (r) / store (w) status properties
-      TexCoordST     = 0x8000  ///< Write texture coordinates as ST instead of UV
+      TexCoordST     = 0x8000, ///< Write texture coordinates as ST instead of UV
+      Default        = Custom, ///< By default write persistent custom properties
   };
+
+  /// Texture filename. This will be written as
+  /// map_Kd in the OBJ writer into the material file.
+  std::string texture_file ;
+
+  /// Filename extension for material files when writing OBJs
+  /// default is currently .mat
+  std::string material_file_extension;
 
 public:
 
   /// Default constructor
-  Options() : flags_( Default )
+  Options() : texture_file(""), material_file_extension(".mat"), flags_( Default )
   { }
 
-
-  /// Copy constructor
-  Options(const Options& _opt) : flags_(_opt.flags_)
-  { }
-
-
-  /// Initializing constructor setting a single option
-  Options(Flag _flg) : flags_( _flg)
-  { }
-
-
-  /// Initializing constructor setting multiple options
+   /// Initializing constructor setting multiple options
   Options(const value_type _flgs) : flags_( _flgs)
-  { }
-
-
-  ~Options()
   { }
 
   /// Restore state after default constructor.
@@ -154,16 +149,8 @@ public:
 public:
 
 
-  //@{
-  /// Copy options defined in _rhs.
-
-  Options& operator = ( const Options& _rhs )
-  { flags_ = _rhs.flags_; return *this; }
-
   Options& operator = ( const value_type _rhs )
   { flags_ = _rhs; return *this; }
-
-  //@}
 
 
   //@{
