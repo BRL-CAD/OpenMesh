@@ -58,7 +58,7 @@
 // ----------------------------------------------------------------------------
 
 
-#define OM_VERSION 0x0A000
+#define OM_VERSION 0x0B0000
 //#define OM_VERSION 0x70200
 
 #define OM_GET_VER ((OM_VERSION & 0xf0000) >> 16)

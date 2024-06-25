@@ -749,7 +749,7 @@ TEST_F(OpenMeshProperties, PropertyIterators ) {
 TEST_F(OpenMeshProperties, MeshAssignment ) {
 
   mesh_.clear();
-  mesh_.add_vertex(Mesh::Point());
+  mesh_.add_vertex(Mesh::Point(0, 0, 0));
 
   auto copy = mesh_;
 

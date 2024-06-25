@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -206,11 +206,8 @@ public:
    *
    * \sa new_vertex(), new_vertex_dirty()
    *
-   * \attention Be careful to not use a reference to a point in the mesh itself here.
-   *            as a resize of the underlying vector might invalidate this reference
-   *            and cause a segfault.  
    */
-  inline SmartVertexHandle new_vertex(const Point& _p)
+  inline SmartVertexHandle new_vertex(const Point _p)
   {
     VertexHandle vh(Kernel::new_vertex());
     this->set_point(vh, _p);
@@ -226,9 +223,9 @@ public:
    * new_vertex(const Point &) saves reallocation and reinitialization of
    * property memory.
    *
-   * \sa new_vertex(const Point &)
+   * \sa new_vertex(const Point )
    */
-  inline SmartVertexHandle new_vertex_dirty(const Point& _p)
+  inline SmartVertexHandle new_vertex_dirty(const Point _p)
   {
     VertexHandle vh(Kernel::new_vertex_dirty());
     this->set_point(vh, _p);
@@ -237,16 +234,12 @@ public:
 
   /** Alias for new_vertex(const Point&).
   *
-  *    \attention Be careful to not use a reference to a point in the mesh itself here.
-  *               as a resize of the underlying vector might invalidate this reference
-  *               and cause a segfault.           
-  *
   */
-  inline SmartVertexHandle add_vertex(const Point& _p)
+  inline SmartVertexHandle add_vertex(const Point _p)
   { return new_vertex(_p); }
 
   /// Alias for new_vertex_dirty().
-  inline SmartVertexHandle add_vertex_dirty(const Point& _p)
+  inline SmartVertexHandle add_vertex_dirty(const Point _p)
   { return make_smart(new_vertex_dirty(_p), this); }
 
   // --- normal vectors ---

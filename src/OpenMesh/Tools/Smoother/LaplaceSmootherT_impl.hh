@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -185,14 +185,14 @@ compute_weights(LaplaceWeighting _weighting)
 
         heh2   = Base::mesh_.next_halfedge_handle(heh0);
         p2     = &Base::mesh_.point(Base::mesh_.to_vertex_handle(heh2));
-        d0     = (*p0 - *p2); d0.normalize();
-        d1     = (*p1 - *p2); d1.normalize();
+        d0     = (*p0 - *p2); normalize(d0);
+        d1     = (*p1 - *p2); normalize(d1);
         weight += static_cast<typename Mesh::Scalar>(1.0) / tan(acos(std::max(lb, std::min(ub, dot(d0,d1) ))));
 
         heh2   = Base::mesh_.next_halfedge_handle(heh1);
         p2     = &Base::mesh_.point(Base::mesh_.to_vertex_handle(heh2));
-        d0     = (*p0 - *p2); d0.normalize();
-        d1     = (*p1 - *p2); d1.normalize();
+        d0     = (*p0 - *p2); normalize(d0);
+        d1     = (*p1 - *p2); normalize(d1);
         weight += static_cast<typename Mesh::Scalar>(1.0) / tan(acos(std::max(lb, std::min(ub, dot(d0,d1) ))));
 
         Base::mesh_.property(edge_weights_, *e_it) = weight;

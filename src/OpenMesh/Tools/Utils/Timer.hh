@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -98,7 +98,11 @@ public:
 
   Timer(void);
 
+  /// Make the timer non copyable
   Timer(const Timer& _other) = delete;
+
+  /// Make the timer non copyable
+  Timer& operator=( const Timer& ) = delete;
 
   ~Timer(void);
 
@@ -143,6 +147,8 @@ public:
       specify a wanted resolution.
    */
   static std::string as_string(double seconds, Format format = Automatic);
+
+
 
 public:
 

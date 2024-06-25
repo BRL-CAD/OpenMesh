@@ -49,15 +49,11 @@ TEST_F(OpenMeshDirectSettingProperties, SetVertexPositionsDirectly) {
 
   auto point_vector = mesh_.property(pos_pro).data_vector();
 
-  int vertex_count = 0;
-  for( auto p : point_vector) {
-//      std::cerr << p[0] << " " << p[1] <<  " " << p[2] << std::endl;
-      ++vertex_count;
-  }
+  auto vertex_count = point_vector.size();
 
   EXPECT_EQ(4u, mesh_.n_vertices() ) << "Wrong number of vertices";
 
-  EXPECT_EQ(4, vertex_count) << "Wrong number of vertices when counting direct point property vector";
+  EXPECT_EQ(4u, vertex_count) << "Wrong number of vertices when counting direct point property vector";
 
 
 }

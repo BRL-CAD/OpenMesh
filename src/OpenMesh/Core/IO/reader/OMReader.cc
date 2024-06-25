@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -155,7 +155,7 @@ bool _OMReader_::read(std::istream& _is, BaseImporter& _bi, Options& _opt)
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_ascii(std::istream& /* _is */, BaseImporter& /* _bi */, Options& /* _opt */) const
+bool _OMReader_::read_ascii(std::istream& /* _is */, BaseImporter& /* _bi */, const Options& /* _opt */) const
 {
   // not supported yet!
   return false;
@@ -164,7 +164,7 @@ bool _OMReader_::read_ascii(std::istream& /* _is */, BaseImporter& /* _bi */, Op
 
 //-----------------------------------------------------------------------------
 
-bool _OMReader_::read_binary(std::istream& _is, BaseImporter& _bi, Options& _opt) const
+bool _OMReader_::read_binary(std::istream& _is, BaseImporter& _bi, const Options& _opt) const
 {
   bool swap_required = _opt.check(Options::Swap) || (Endian::local() == Endian::MSB);
 

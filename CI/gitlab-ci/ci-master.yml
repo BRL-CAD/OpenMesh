@@ -43,7 +43,7 @@ trigger_openmesh-python-rebuild:
      - master
   dependencies: []
   script:
-    - "curl -X POST -F token=b63ed804ada51d7d1ffe5d6ea0dfa2 -F ref=track-OM-master https://www.graphics.rwth-aachen.de:9000/api/v4/projects/1024/trigger/pipeline"
+    - "curl -X POST -F token=b63ed804ada51d7d1ffe5d6ea0dfa2 -F ref=track-OM-master https://gitlab.vci.rwth-aachen.de:9000/api/v4/projects/1024/trigger/pipeline"
 
 #Debian:
 #  stage: deploy

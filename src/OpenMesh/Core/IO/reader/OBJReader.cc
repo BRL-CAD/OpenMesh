@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -287,8 +287,8 @@ read_vertices(std::istream& _in, BaseImporter& _bi, Options& _opt,
               std::vector<VertexHandle> & vertexHandles,
               Options & fileOptions)
 {
-    float x, y, z, u, v, w;
-    float r, g, b;
+    double x, y, z, u, v, w;
+    double r, g, b;
 
     std::string line;
     std::string keyWrd;

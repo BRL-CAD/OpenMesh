@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -64,14 +64,6 @@
 #include <vector>
 
 
-#if defined(OM_CC_MIPS) // avoid warnings
-#  define MIPS_WARN_WA( Item ) \
-  void raise(typename M:: ## Item ## Handle &_h, state_t _target_state ) \
-  { Inherited::raise(_h, _target_state); }
-#else
-#  define MIPS_WARN_WA( Item )
-#endif
-
 //== NAMESPACE ================================================================
 
 namespace OpenMesh   { // BEGIN_NS_OPENMESH
@@ -103,7 +95,6 @@ public:
 
   void raise(typename M::FaceHandle&   _fh, state_t _target_state) override;
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Edge) // avoid warning
 };
 
 
@@ -155,8 +146,6 @@ public:
   explicit VF(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::FaceHandle& _fh, state_t _target_state) override;
-  MIPS_WARN_WA(Edge)
-  MIPS_WARN_WA(Vertex)
 };
 
 
@@ -177,8 +166,6 @@ public:
   explicit FF(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::FaceHandle& _fh, state_t _target_state) override;
-  MIPS_WARN_WA(Vertex) // avoid warning
-  MIPS_WARN_WA(Edge  ) // avoid warning
 };
 
 
@@ -199,8 +186,6 @@ public:
   explicit FFc(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::FaceHandle& _fh, state_t _target_state) override;
-  MIPS_WARN_WA(Vertex) // avoid warning
-  MIPS_WARN_WA(Edge  ) // avoid warning
 };
 
 
@@ -221,8 +206,6 @@ public:
   explicit FV(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 };
 
 
@@ -243,8 +226,6 @@ public:
   explicit FVc(M& _mesh) : Inherited(_mesh) { init_coeffs(50); }
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 
   static void init_coeffs(size_t _max_valence);
   static const std::vector<double>& coeffs() { return coeffs_; }
@@ -280,8 +261,6 @@ public:
   explicit VV(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 };
 
 
@@ -302,8 +281,6 @@ public:
   explicit VVc(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 };
 
 
@@ -324,8 +301,6 @@ public:
   explicit VE(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -346,8 +321,6 @@ public:
   explicit VdE(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -368,8 +341,6 @@ public:
   explicit VdEc(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -390,8 +361,6 @@ public:
   explicit EV(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 };
 
 
@@ -413,8 +382,6 @@ public:
   explicit EVc(M& _mesh) : Inherited(_mesh) { init_coeffs(50); }
 
   void raise(typename M::VertexHandle& _vh, state_t _target_state) override;
-  MIPS_WARN_WA(Face) // avoid warning
-  MIPS_WARN_WA(Edge) // avoid warning
 
   static void init_coeffs(size_t _max_valence);
   static const std::vector<double>& coeffs() { return coeffs_; }
@@ -449,8 +416,6 @@ public:
   explicit EF(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::FaceHandle& _fh, state_t _target_state) override;
-  MIPS_WARN_WA(Edge  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -471,8 +436,6 @@ public:
   explicit FE(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -493,8 +456,6 @@ public:
   explicit EdE(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 
@@ -515,13 +476,10 @@ public:
   explicit EdEc(M& _mesh) : Inherited(_mesh) {}
 
   void raise(typename M::EdgeHandle& _eh, state_t _target_state) override;
-  MIPS_WARN_WA(Face  ) // avoid warning
-  MIPS_WARN_WA(Vertex) // avoid warning
 };
 
 // ----------------------------------------------------------------------------
 
-#undef MIPS_WARN_WA
 
 //=============================================================================
 } // END_NS_ADAPTIVE

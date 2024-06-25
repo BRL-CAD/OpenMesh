@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -216,8 +216,6 @@ _OBJWriter_::
 write(std::ostream& _out, BaseExporter& _be, const Options& _writeOptions, std::streamsize _precision) const
 {
   unsigned int idx;
-  Vec3f v, n;
-  Vec2f t;
   VertexHandle vh;
   std::vector<VertexHandle> vhandles;
   bool useMatrial = false;
@@ -296,7 +294,7 @@ write(std::ostream& _out, BaseExporter& _be, const Options& _writeOptions, std::
     for (size_t i=0, nV=_be.n_vertices(); i<nV; ++i)
     {
       vh = VertexHandle(static_cast<int>(i));
-      t  = _be.texcoord(vh);
+      Vec2f t  = _be.texcoord(vh);
       texMap[t] = static_cast<int>(i);
     }
   }
@@ -313,18 +311,27 @@ write(std::ostream& _out, BaseExporter& _be, const Options& _writeOptions, std::
     }
   }
 
-  // vertex data (point, normals, texcoords)
+  const bool normal_double = _be.is_normal_double();
+  const bool point_double = _be.is_point_double();
   for (size_t i=0, nV=_be.n_vertices(); i<nV; ++i)
   {
-    vh = VertexHandle(int(i));
-    v  = _be.point(vh);
-    n  = _be.normal(vh);
-    t  = _be.texcoord(vh);
-
-    _out << "v " << v[0] <<" "<< v[1] <<" "<< v[2] << '\n';
-
-    if (_writeOptions.check(Options::VertexNormal))
-      _out << "vn " << n[0] <<" "<< n[1] <<" "<< n[2] << '\n';    
+      vh = VertexHandle(int(i));
+      if (point_double) {
+          auto v = _be.pointd(vh);
+          _out << "v " << v[0] <<" "<< v[1] <<" "<< v[2] << '\n';
+      } else {
+          auto v = _be.point(vh);
+          _out << "v " << v[0] <<" "<< v[1] <<" "<< v[2] << '\n';
+      }
+      if (_writeOptions.check(Options::VertexNormal)) {
+        if (normal_double) {
+            auto n = _be.normald(vh);
+            _out << "vn " << n[0] <<" "<< n[1] <<" "<< n[2] << '\n';
+        } else {
+            auto n = _be.normal(vh);
+            _out << "vn " << n[0] <<" "<< n[1] <<" "<< n[2] << '\n';
+        }
+      }
   }
 
   size_t lastMat = std::numeric_limits<std::size_t>::max();

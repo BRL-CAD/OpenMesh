@@ -24,6 +24,32 @@ class OpenMeshReadWritePLY : public OpenMeshBase {
     //Mesh mesh_;
 };
 
+struct CustomTraits3f : public OpenMesh::DefaultTraits {
+	typedef OpenMesh::Vec3f Color;
+};
+
+typedef OpenMesh::TriMesh_ArrayKernelT<CustomTraits3f> Mesh3f;
+
+class OpenMeshReadWritePLYColorVec3f : public testing::Test {
+
+    protected:
+
+        // This function is called before each test is run
+        virtual void SetUp() {
+
+            // Do some initial stuff with the member data here...
+        }
+
+        // This function is called after all tests are through
+        virtual void TearDown() {
+
+            // Do some final stuff with the member data here...
+        }
+
+    // This member will be accessible in all tests
+    Mesh3f mesh_;
+};
+
 /*
  * ====================================================================
  * Define tests below
@@ -1334,5 +1360,147 @@ TEST_F(OpenMeshReadWritePLY, WriteAndReadPLYWithFaceColors) {
         mesh_.release_face_colors();
     }
 }
+
+/*
+ * Just load a ply file of a cube with vertex colors
+ */
+TEST_F(OpenMeshReadWritePLYColorVec3f , LoadSimplePLYWithVertexColorsVec3f) {
+
+    mesh_.clear();
+
+    mesh_.request_vertex_colors();
+
+    OpenMesh::IO::Options options;
+    options += OpenMesh::IO::Options::VertexColor;
+
+    bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-vertexColors.ply",options);
+
+    EXPECT_TRUE(ok) << "Unable to load cube-minimal-vertexColors.ply";
+
+    EXPECT_EQ(8u  , mesh_.n_vertices()) << "The number of loaded vertices is not correct!";
+    EXPECT_EQ(18u , mesh_.n_edges())    << "The number of loaded edges is not correct!";
+    EXPECT_EQ(12u , mesh_.n_faces())    << "The number of loaded faces is not correct!";
+
+#ifdef TEST_DOUBLE_TRAITS
+    EXPECT_FLOAT_EQ(1.0, mesh_.color(mesh_.vertex_handle(0))[0] ) << "Wrong vertex color at vertex 0 component 0";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(0))[1] ) << "Wrong vertex color at vertex 0 component 1";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(0))[2] ) << "Wrong vertex color at vertex 0 component 2";
+
+    EXPECT_FLOAT_EQ(1.0, mesh_.color(mesh_.vertex_handle(3))[0] ) << "Wrong vertex color at vertex 3 component 0";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(3))[1] ) << "Wrong vertex color at vertex 3 component 1";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(3))[2] ) << "Wrong vertex color at vertex 3 component 2";
+
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(4))[0] ) << "Wrong vertex color at vertex 4 component 0";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(4))[1] ) << "Wrong vertex color at vertex 4 component 1";
+    EXPECT_FLOAT_EQ(1.0, mesh_.color(mesh_.vertex_handle(4))[2] ) << "Wrong vertex color at vertex 4 component 2";
+
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(7))[0] ) << "Wrong vertex color at vertex 7 component 0";
+    EXPECT_FLOAT_EQ(0.0, mesh_.color(mesh_.vertex_handle(7))[1] ) << "Wrong vertex color at vertex 7 component 1";
+    EXPECT_FLOAT_EQ(1.0, mesh_.color(mesh_.vertex_handle(7))[2] ) << "Wrong vertex color at vertex 7 component 2";
+#else
+    EXPECT_EQ(1.0f, mesh_.color(mesh_.vertex_handle(0))[0] ) << "Wrong vertex color at vertex 0 component 0";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(0))[1] ) << "Wrong vertex color at vertex 0 component 1";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(0))[2] ) << "Wrong vertex color at vertex 0 component 2";
+
+    EXPECT_EQ(1.0f, mesh_.color(mesh_.vertex_handle(3))[0] ) << "Wrong vertex color at vertex 3 component 0";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(3))[1] ) << "Wrong vertex color at vertex 3 component 1";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(3))[2] ) << "Wrong vertex color at vertex 3 component 2";
+
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(4))[0] ) << "Wrong vertex color at vertex 4 component 0";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(4))[1] ) << "Wrong vertex color at vertex 4 component 1";
+    EXPECT_EQ(1.0f, mesh_.color(mesh_.vertex_handle(4))[2] ) << "Wrong vertex color at vertex 4 component 2";
+
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(7))[0] ) << "Wrong vertex color at vertex 7 component 0";
+    EXPECT_EQ(0,   mesh_.color(mesh_.vertex_handle(7))[1] ) << "Wrong vertex color at vertex 7 component 1";
+    EXPECT_EQ(1.0f, mesh_.color(mesh_.vertex_handle(7))[2] ) << "Wrong vertex color at vertex 7 component 2";
+#endif
+
+    EXPECT_FALSE(options.vertex_has_normal()) << "Wrong user options are returned!";
+    EXPECT_FALSE(options.vertex_has_texcoord()) << "Wrong user options are returned!";
+    EXPECT_TRUE(options.vertex_has_color()) << "Wrong user options are returned!";
+
+    mesh_.release_vertex_colors();
+}
+
+/*
+ * Write and read PLY files with face colors in various formats
+ */
+TEST_F(OpenMeshReadWritePLYColorVec3f , WriteAndReadPLYWithFaceColorsVec3f) {
+    struct Format {
+        Format(const char* outFileName, OpenMesh::IO::Options options) :
+            _outFileName(outFileName),
+            _options(options)
+        {}
+        const char*  _outFileName;
+        const OpenMesh::IO::Options  _options;
+    }
+    formats[] =
+        {
+            Format("cube-minimal-faceColors_ascii_uchar.ply",
+                   OpenMesh::IO::Options::Default),
+            Format("cube-minimal-faceColors_ascii_float.ply",
+                   OpenMesh::IO::Options::ColorFloat),
+            Format("cube-minimal-faceColors_binary_uchar.ply",
+                   OpenMesh::IO::Options::Binary),
+            Format("cube-minimal-faceColors_binary_float.ply",
+                   OpenMesh::IO::Options::Binary | OpenMesh::IO::Options::ColorFloat),
+            // Test writing/reading alpha values (all default 1.0/255), but the test mesh
+            // Color type has no alpha channel so there's nothing to test below
+            Format("cube-minimal-faceColors_alpha_ascii_uchar.ply",
+                   OpenMesh::IO::Options::ColorAlpha),
+            Format("cube-minimal-faceColors_alpha_ascii_float.ply",
+                   OpenMesh::IO::Options::ColorFloat | OpenMesh::IO::Options::ColorAlpha),
+            Format("cube-minimal-faceColors_alpha_binary_uchar.ply",
+                   OpenMesh::IO::Options::Binary | OpenMesh::IO::Options::ColorAlpha),
+            Format("cube-minimal-faceColors_alpha_binary_float.ply",
+                   OpenMesh::IO::Options::Binary | OpenMesh::IO::Options::ColorFloat | OpenMesh::IO::Options::ColorAlpha),
+        };
+
+    for (size_t i = 0; i < sizeof(formats) / sizeof(Format); ++i)
+    {
+        const char*  outFileName = formats[i]._outFileName;
+
+        mesh_.clear();
+
+        mesh_.request_face_colors();
+
+        OpenMesh::IO::Options options;
+        options += OpenMesh::IO::Options::FaceColor;
+
+        bool ok = OpenMesh::IO::read_mesh(mesh_, "cube-minimal-faceColors.ply", options);
+
+        EXPECT_TRUE(ok) << "Unable to load cube-minimal-faceColors.ply";
+
+        options = formats[i]._options;
+        options += OpenMesh::IO::Options::FaceColor;
+        ok = OpenMesh::IO::write_mesh(mesh_, outFileName, options);
+        EXPECT_TRUE(ok) << "Unable to write " << outFileName;
+
+        // Reset for reading: let the reader determine binary/float/etc.
+        options = OpenMesh::IO::Options::FaceColor;
+        mesh_.clear();
+        ok = OpenMesh::IO::read_mesh(mesh_, outFileName, options);
+        EXPECT_TRUE(ok) << "Unable to load " << outFileName;
+
+        EXPECT_EQ(8u , mesh_.n_vertices()) << "The number of loaded vertices is not correct: " << outFileName;
+        EXPECT_EQ(18u, mesh_.n_edges())    << "The number of loaded edges is not correct: " << outFileName;
+        EXPECT_EQ(12u, mesh_.n_faces())    << "The number of loaded faces is not correct: " << outFileName;
+
+
+        // Just a compilation test and runtime. No value test, as they are float
+
+        EXPECT_FALSE(options.vertex_has_normal()) << "Wrong user options are returned: " << outFileName;
+        EXPECT_FALSE(options.vertex_has_texcoord()) << "Wrong user options are returned: " << outFileName;
+        EXPECT_FALSE(options.vertex_has_color()) << "Wrong user options are returned: " << outFileName;
+        EXPECT_TRUE(options.face_has_color()) << "Wrong user options are returned: " << outFileName;
+        EXPECT_EQ(formats[i]._options.color_is_float(), options.color_is_float()) <<
+            "Wrong user options are returned: " << outFileName;
+        EXPECT_EQ(formats[i]._options.is_binary(), options.is_binary()) <<
+            "Wrong user options are returned: " << outFileName;
+
+        mesh_.release_face_colors();
+    }
+}
+
 
 }

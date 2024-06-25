@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -57,6 +57,9 @@
 #include <OpenMesh/Tools/Utils/Timer.hh>
 #include <OpenMesh/Apps/QtViewer/QGLViewerWidget.hh>
 
+#ifndef __APPLE__
+  #include <GL/gl.h>
+#endif
 
 //== FORWARDS =================================================================
 

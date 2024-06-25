@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -55,6 +55,10 @@
     #include <QGLWidget>
 #else
     #include <QtOpenGLWidgets/QOpenGLWidget>
+#endif
+
+#ifndef __APPLE__
+  #include <GL/gl.h>
 #endif
 
 //== FORWARD DECLARATIONS =====================================================

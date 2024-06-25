@@ -17,7 +17,6 @@ template <int DIM> class Vec {
 	Vec(float x, float y, float z, float w) : data({ x, y, z, w }) {}
 	  
     Vec() = default;
-    Vec(Vec<DIM> const &) = default;
 
     float &operator[](int i) { return data[i]; }
     float operator[](int i) const { return data[i]; }

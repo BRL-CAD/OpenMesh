@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -145,8 +145,6 @@ check(unsigned int _targets, std::ostream& _os)
 
   if (_targets & CHECK_EDGES)
   {
-    typename Mesh::ConstHalfedgeIter  h_it(mesh_.halfedges_begin()), 
-        h_end(mesh_.halfedges_end());
     typename Mesh::HalfedgeHandle     hstart, hhh;
     size_t                            n_halfedges = 2*mesh_.n_edges();
 
@@ -215,8 +213,6 @@ check(unsigned int _targets, std::ostream& _os)
 
   if (_targets & CHECK_FACES)
   {
-    typename Mesh::ConstFaceIter          f_it(mesh_.faces_begin()), 
-        f_end(mesh_.faces_end());
     typename Mesh::ConstFaceHalfedgeIter  fh_it;
 
     for(const auto fh: mesh_.faces()) {

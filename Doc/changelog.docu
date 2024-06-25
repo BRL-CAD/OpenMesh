@@ -6,6 +6,37 @@
 
 <!-- --------------------------------------------------------------------- -->
 
+<tr valign=top><td><b>11.0</b> (2024/05/14)</td><td>
+
+<b>Core</b>
+<ul>
+<li>Changed add_vertex and new_vertex to copy the given position by value instead of by reference. Avoids crash when copying directly inside mesh on reallocation and most compilers optimize that to be faster.</li>
+</ul>
+
+<b>Documentation</b>
+<ul>
+<li>Update Doxygen config format</li>
+</ul>
+
+<b>Tools</b>
+<ul>
+<li>HoleFiller: Added a simple Holefilling algorith.</li>
+</ul>
+
+<b>IO</b>
+<ul>
+<li>PLY reader/writer: Fixed color trait Vec3f compilation for PLY writer</li>
+<li>OBJ Reader/Writer: Avoid precision loss when writing coordinates and normals.</li>
+</ul>
+
+<b>Build System</b>
+<ul>
+<li>GTest is now automatically fetched via official git repository and build when unittests have been enabled</li>
+</ul>
+
+</tr>
+
+
 <tr valign=top><td><b>10.0</b> (2023/11/14)</td><td>
 
 <b>Breaking Changes</b>

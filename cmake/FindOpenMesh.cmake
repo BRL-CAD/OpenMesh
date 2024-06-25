@@ -7,7 +7,7 @@
 # OPENMESH_LIBRARIES       - Link these to use OPENMESH
 # OPENMESH_LIBRARY_DIR     - directory where the libraries are included
 #
-# Copyright 2015 Computer Graphics Group, RWTH Aachen University
+# Copyright 2024 Computer Graphics Group, RWTH Aachen University
 # Authors: Jan Möbius <moebius@cs.rwth-aachen.de>
 #          Hans-Christian Ebke <ebke@cs.rwth-aachen.de>
 #
@@ -15,7 +15,7 @@
 #===========================================================================
 #                                                                           
 #                               OpenMesh                                    
-#           Copyright (c) 2001-2023, RWTH-Aachen University                 
+#           Copyright (c) 2001-2024, RWTH-Aachen University                 
 #           Department of Computer Graphics and Multimedia                 
 #                          All rights reserved.                             
 #                            www.openmesh.org                               
@@ -63,6 +63,7 @@ IF (NOT OPENMESH_FOUND)
     "${CMAKE_SOURCE_DIR}/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/libs_required/OpenMesh/src/OpenMesh"
     "${CMAKE_SOURCE_DIR}/../OpenMesh/src/OpenMesh"
+    "C:/Program Files/OpenMesh 11.0"
     "C:/Program Files/OpenMesh 10.0"
     "C:/Program Files/OpenMesh 9.0"
     "C:/Program Files/OpenMesh 8.1"
@@ -70,47 +71,13 @@ IF (NOT OPENMESH_FOUND)
     "C:/Program Files/OpenMesh 7.2"
     "C:/Program Files/OpenMesh 7.1"
     "C:/Program Files/OpenMesh 7.0"
-    "C:/Program Files/OpenMesh 6.3"
-    "C:/Program Files/OpenMesh 6.2"
-    "C:/Program Files/OpenMesh 6.1"
-    "C:/Program Files/OpenMesh 6.0"
-    "C:/Program Files/OpenMesh 5.2"
-    "C:/Program Files/OpenMesh 5.1"
-    "C:/Program Files/OpenMesh 5.0"
-    "C:/Program Files/OpenMesh 4.2"
-    "C:/Program Files/OpenMesh 4.1"
-    "C:/Program Files/OpenMesh 4.0"
-    "C:/Program Files/OpenMesh 3.4"
-    "C:/Program Files/OpenMesh 3.3"
-    "C:/Program Files/OpenMesh 3.2"
-    "C:/Program Files/OpenMesh 3.1"
-    "C:/Program Files/OpenMesh 3.0"
-    "C:/Program Files/OpenMesh 2.4.1"
-    "C:/Program Files/OpenMesh 2.4"
-    "C:/Program Files/OpenMesh 2.0/include"
+    "C:/libs/OpenMesh 11.0"
     "C:/libs/OpenMesh 10.0"
     "C:/libs/OpenMesh 9.0"
     "C:/libs/OpenMesh 8.1"
     "C:/libs/OpenMesh 8.0"
     "C:/libs/OpenMesh 7.1"
     "C:/libs/OpenMesh 7.0"
-    "C:/libs/OpenMesh 6.3"
-    "C:/libs/OpenMesh 6.2"
-    "C:/libs/OpenMesh 6.1"
-    "C:/libs/OpenMesh 6.0"
-    "C:/libs/OpenMesh 5.2"
-    "C:/libs/OpenMesh 5.1"
-    "C:/libs/OpenMesh 5.0"
-    "C:/libs/OpenMesh 4.2"
-    "C:/libs/OpenMesh 4.1"
-    "C:/libs/OpenMesh 4.0"
-    "C:/libs/OpenMesh 3.4"
-    "C:/libs/OpenMesh 3.3"
-    "C:/libs/OpenMesh 3.2"
-    "C:/libs/OpenMesh 3.1"
-    "C:/libs/OpenMesh 3.0"
-    "C:/libs/OpenMesh 2.4.1"
-    "C:/libs/OpenMesh 2.4"
     "${OPENMESH_LIBRARY_DIR}"
   )
 

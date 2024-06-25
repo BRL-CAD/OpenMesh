@@ -19,7 +19,6 @@ IF "%SHARED%" == "TRUE" (
 
 IF "%BUILD_PLATFORM%" == "VS2015" (
     set LIBPATH=E:\libs\VS2015
-    set GTESTVERSION=gtest-1.7.0
     set GENERATOR=Visual Studio 14%ARCH_VS%
     set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.com"
 
@@ -37,7 +36,6 @@ IF "%BUILD_PLATFORM%" == "VS2015" (
 
 IF "%BUILD_PLATFORM%" == "VS2017" (
     set LIBPATH=E:\libs\VS2017
-    set GTESTVERSION=gtest-1.7.0
     set GENERATOR=Visual Studio 15%ARCH_VS%
     set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\devenv.com"
 
@@ -51,7 +49,6 @@ IF "%BUILD_PLATFORM%" == "VS2017" (
 
 IF "%BUILD_PLATFORM%" == "VS2019" (
     set LIBPATH=E:\libs\VS2019
-    set GTESTVERSION=gtest-1.11.0
     set GENERATOR=Visual Studio 16 2019
     set VS_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.com"
 
@@ -91,7 +88,6 @@ ECHO "Building with :"
 whoami
 ECHO "ARCHITECTURE        : %ARCHITECTURE%"
 ECHO "BUILD_PLATFORM      : %BUILD_PLATFORM%"
-ECHO "GTESTVERSION        : %GTESTVERSION%"
 ECHO "GENERATOR           : %GENERATOR%"
 ECHO "VS_PATH             : %VS_PATH%"
 ECHO "LIBPATH             : %LIBPATH%"
@@ -120,7 +116,7 @@ IF EXIST %QT_INSTALL_PATH%\ (
 )
 
 
-"C:\Program Files\CMake\bin\cmake.exe" -DGTEST_ROOT="%LIBPATH%\%ARCHITECTURE%\%GTESTVERSION%" -G "%GENERATOR%"  -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=%APPS% -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DCMAKE_WINDOWS_LIBS_DIR="e:\libs" -DOPENMESH_BUILD_SHARED=%SHARED% %CMAKE_CONFIGURATION% ..
+"C:\Program Files\CMake\bin\cmake.exe" -G "%GENERATOR%"  -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=%APPS% -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DCMAKE_WINDOWS_LIBS_DIR="e:\libs" -DOPENMESH_BUILD_SHARED=%SHARED% %CMAKE_CONFIGURATION% ..
 
 %VS_PATH% /Build "Release" OpenMesh.sln /Project "ALL_BUILD"
 
@@ -142,7 +138,7 @@ mkdir build-debug
 
 cd build-debug
 
-"C:\Program Files\CMake\bin\cmake.exe" -DGTEST_ROOT="%LIBPATH%\%ARCHITECTURE%\%GTESTVERSION%" -G "%GENERATOR%" -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_SHARED=%SHARED% -DBUILD_APPS=%APPS% %CMAKE_CONFIGURATION% ..
+"C:\Program Files\CMake\bin\cmake.exe" -G "%GENERATOR%" -DOPENMESH_BUILD_UNIT_TESTS=TRUE -DCMAKE_BUILD_TYPE=Debug -DOPENMESH_BUILD_SHARED=%SHARED% -DBUILD_APPS=%APPS% %CMAKE_CONFIGURATION% ..
 
 %VS_PATH% /Build "Debug" OpenMesh.sln /Project "ALL_BUILD"
 
@@ -174,7 +170,7 @@ cd build-release
 
 del *.exe
 
-"C:\Program Files\CMake\bin\cmake.exe" -DGTEST_ROOT="%LIBPATH%\%ARCHITECTURE%\%GTESTVERSION%"  -G "%GENERATOR%" -DBUILD_APPS=%APPS% -DCMAKE_BUILD_TYPE=Release %CMAKE_CONFIGURATION% ..
+"C:\Program Files\CMake\bin\cmake.exe" -G "%GENERATOR%" -DBUILD_APPS=%APPS% -DCMAKE_BUILD_TYPE=Release %CMAKE_CONFIGURATION% ..
 
 %VS_PATH% /Build "Release" OpenMesh.sln /Project "PACKAGE"
 

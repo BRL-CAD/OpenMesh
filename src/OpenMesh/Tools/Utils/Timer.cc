@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -163,10 +163,10 @@ public:
     ~TimerImplPosix()
     { }
 
-    virtual void reset(void) { seconds_ = 0.0; }
+    virtual void reset(void) override { seconds_ = 0.0; }
 
-    virtual void start(void) { seconds_ = 0.0; clock_gettime( id_, &start_ ); }
-    virtual void stop(void)
+    virtual void start(void) override { seconds_ = 0.0; clock_gettime( id_, &start_ ); }
+    virtual void stop(void) override
     {
         timespec stop;
         clock_gettime( id_, &stop );
@@ -174,9 +174,9 @@ public:
         seconds_ += ( (double(stop.tv_nsec-start_.tv_nsec)*1e-9) );
     }
 
-    virtual void cont(void)  { clock_gettime( id_, &start_ ); }
+    virtual void cont(void) override { clock_gettime( id_, &start_ ); }
 
-    virtual double seconds() const { return seconds_; }
+    virtual double seconds() override const { return seconds_; }
 
 protected:
    clockid_t id_;

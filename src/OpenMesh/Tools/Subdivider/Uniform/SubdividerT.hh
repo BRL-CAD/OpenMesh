@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -166,8 +166,12 @@ protected:
 
   /// \name Overload theses methods
   //@{
-  /// Prepare mesh, e.g. add properties
-  virtual bool prepare( MeshType& _m ) = 0;
+  /** \brief Prepare mesh, e.g. add properties
+   *
+   *  You have to reimplement this function to setup your mesh. The default implementation
+   *  will always return false and therefore block your algorithm.
+   */
+  virtual bool prepare( MeshType& /*_m*/ ) { return false; };
 
   /// Subdivide mesh \c _m \c _n times
   virtual bool subdivide( MeshType& _m, size_t _n, const bool _update_points = true) = 0;

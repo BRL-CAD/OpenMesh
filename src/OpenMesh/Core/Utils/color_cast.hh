@@ -1,7 +1,7 @@
 /* ========================================================================= *
  *                                                                           *
  *                               OpenMesh                                    *
- *           Copyright (c) 2001-2023, RWTH-Aachen University                 *
+ *           Copyright (c) 2001-2025, RWTH-Aachen University                 *
  *           Department of Computer Graphics and Multimedia                  *
  *                          All rights reserved.                             *
  *                            www.openmesh.org                               *
@@ -208,6 +208,20 @@ struct color_caster<Vec4uc,Vec3f>
                    (unsigned char)(_src[2]* 255.0f + 0.5f),
                    (unsigned char)(255) );
   }
+};
+
+template <>
+struct color_caster<Vec4ui,Vec3f>
+{
+    typedef Vec4ui return_type;
+
+    inline static return_type cast(const Vec3f& _src)
+    {
+        return Vec4ui( (unsigned int)(_src[0]* 255.0f + 0.5f),
+                      (unsigned int)(_src[1]* 255.0f + 0.5f),
+                      (unsigned int)(_src[2]* 255.0f + 0.5f),
+                      (unsigned int)(255) );
+    }
 };
 
 template <>
